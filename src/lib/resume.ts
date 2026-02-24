@@ -1,12 +1,11 @@
 export const profile = {
-  name: "Land1ngW",
-  nameReal: "王若淼",
-  title: "游戏引擎开发 / 图形渲染工程师",
-  subtitle: "UE5 · 全局光照 · 渲染管线 · 光线追踪",
-  email: "1738832489@qq.com",
-  phone: "17304471585",
-  zhihu: "https://www.zhihu.com/people/wrm-66-76",
-  github: "https://github.com/LandingW",
+  name: "NxEmO",
+  nameReal: "You-know-Who",
+  title: "游戏引擎开发",
+  subtitle: "UE5 · Unity",
+  email: "439534716@qq.com",
+  phone: "test",
+  github: "https://github.com/NxEmO",
 };
 
 export const education = [
