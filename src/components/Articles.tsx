@@ -17,7 +17,7 @@ interface ArticlesData {
   articles: Article[];
 }
 
-const data = articlesData as ArticlesData;
+const data = articlesData as unknown as ArticlesData;
 
 function formatDate(timestamp: number): string {
   if (!timestamp) return "";
