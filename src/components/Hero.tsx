@@ -64,10 +64,6 @@ export default function Hero() {
             <MailIcon />
             {profile.email}
           </a>
-          <a href={profile.zhihu} target="_blank" rel="noopener noreferrer" className="contact-link">
-            <ZhihuIcon />
-            知乎
-          </a>
           <a href={profile.github} target="_blank" rel="noopener noreferrer" className="contact-link">
             <GithubIcon />
             GitHub
