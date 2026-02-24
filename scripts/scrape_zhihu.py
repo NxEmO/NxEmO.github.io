@@ -57,21 +57,45 @@ def fetch_articles(offset: int = 0) -> dict:
     return resp.json()
 
 
+def extract_thumbnail(raw: dict) -> str | None:
+    """按优先级提取文章封面图 URL。"""
+    # 1. thumbnail_extra_info.thumbnail
+    t = raw.get("thumbnail_extra_info") or {}
+    if isinstance(t, dict):
+        url = t.get("thumbnail") or t.get("url") or ""
+        if isinstance(url, str) and url.startswith("http"):
+            return url
+
+    # 2. 顶层 thumbnail 字段
+    thumb = raw.get("thumbnail")
+    if isinstance(thumb, str) and thumb.startswith("http"):
+        return thumb
+    if isinstance(thumb, dict):
+        url = thumb.get("url") or thumb.get("thumbnail") or ""
+        if isinstance(url, str) and url.startswith("http"):
+            return url
+
+    # 3. 从正文 HTML 中提取第一张 <img> 的 src
+    content = raw.get("content", "") or ""
+    import re as _re
+    m = _re.search(r'<img[^>]+src=["\']([^"\']+)["\']', content)
+    if m:
+        src = m.group(1)
+        if src.startswith("http"):
+            return src
+
+    return None
+
+
 def parse_article(raw: dict) -> dict:
     """从 API 返回的原始数据中提取需要的字段。"""
-    content = raw.get("content", "") or ""
-    # 提取纯文本摘要（去掉 HTML 标签）
     import re
+    content = raw.get("content", "") or ""
+    # 纯文本摘要
     excerpt = re.sub(r"<[^>]+>", "", content)
     excerpt = " ".join(excerpt.split())[:200]
 
-    # 封面图
-    thumbnail = None
-    t = raw.get("thumbnail_extra_info") or {}
-    if isinstance(t, dict):
-        thumbnail = t.get("thumbnail")
-    if not thumbnail:
-        thumbnail = raw.get("thumbnail") or None
+    thumbnail = extract_thumbnail(raw)
 
     return {
         "id": raw.get("id"),

@@ -51,7 +51,7 @@ export default function Sidebar() {
             <span
               style={{
                 fontFamily: "var(--mono)",
-                fontSize: 10,
+                fontSize: 11,
                 color: active === id ? "var(--accent)" : "var(--text-3)",
                 minWidth: 16,
               }}

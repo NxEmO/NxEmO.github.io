@@ -5,16 +5,16 @@ export default function Hero() {
     <section id="home" className="section" style={{ paddingTop: 80, paddingBottom: 0 }}>
       {/* Status */}
       <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 7,
-          padding: "4px 10px",
-          borderRadius: 20,
-          background: "rgba(52,211,153,0.08)",
-          border: "1px solid rgba(52,211,153,0.2)",
-          marginBottom: 20,
-        }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 7,
+            padding: "5px 12px",
+            borderRadius: 20,
+            background: "rgba(52,211,153,0.08)",
+            border: "1px solid rgba(52,211,153,0.2)",
+            marginBottom: 20,
+          }}
       >
         <span
           style={{
@@ -26,7 +26,7 @@ export default function Hero() {
             display: "inline-block",
           }}
         />
-        <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--green)" }}>
+        <span style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--green)" }}>
           在职实习 · 腾讯 IEG 天美 G1
         </span>
       </div>
@@ -68,7 +68,7 @@ export default function Hero() {
       <p
         style={{
           fontFamily: "var(--mono)",
-          fontSize: 12,
+          fontSize: 13,
           color: "var(--text-3)",
           marginBottom: 36,
           letterSpacing: "0.04em",
@@ -127,7 +127,7 @@ export default function Hero() {
           <div
             style={{
               fontFamily: "var(--mono)",
-              fontSize: 11,
+              fontSize: 12,
               color: "var(--text-3)",
               marginTop: 3,
             }}

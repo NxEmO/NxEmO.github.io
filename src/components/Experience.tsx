@@ -21,24 +21,24 @@ export default function Experience() {
                 }}
               >
                 <div>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text-1)", marginBottom: 4 }}>
-                    {exp.role}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                    <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: "var(--text-3)" }}>
-                      {exp.company}
-                    </span>
+                <div style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)", marginBottom: 4 }}>
+                  {exp.role}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: 12, color: "var(--text-3)" }}>
+                    {exp.company}
+                  </span>
                     <span style={{ color: "var(--border)", fontSize: 10 }}>·</span>
                     <span
-                      style={{
-                        fontFamily: "var(--mono)",
-                        fontSize: 11,
-                        color: "var(--accent)",
-                        background: "var(--accent-dim)",
-                        border: "1px solid rgba(96,165,250,0.2)",
-                        borderRadius: 4,
-                        padding: "1px 7px",
-                      }}
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: 12,
+                      color: "var(--accent)",
+                      background: "var(--accent-dim)",
+                      border: "1px solid rgba(96,165,250,0.2)",
+                      borderRadius: 4,
+                      padding: "2px 8px",
+                    }}
                     >
                       {exp.department}
                     </span>
@@ -47,7 +47,7 @@ export default function Experience() {
                 <span
                   style={{
                     fontFamily: "var(--mono)",
-                    fontSize: 10,
+                    fontSize: 12,
                     color: "var(--text-3)",
                     paddingTop: 2,
                     whiteSpace: "nowrap",
@@ -64,7 +64,7 @@ export default function Experience() {
                 <div key={j} className="highlight-item">
                   <div
                     style={{
-                      fontSize: 13,
+                      fontSize: 14,
                       fontWeight: 600,
                       color: "var(--text-2)",
                       marginBottom: 6,
@@ -76,7 +76,7 @@ export default function Experience() {
                     <span
                       style={{
                         fontFamily: "var(--mono)",
-                        fontSize: 10,
+                        fontSize: 11,
                         color: "var(--accent)",
                         opacity: 0.6,
                       }}
@@ -87,7 +87,7 @@ export default function Experience() {
                   </div>
                   <div
                     style={{
-                      fontSize: 13,
+                      fontSize: 14,
                       color: "var(--text-3)",
                       lineHeight: 1.8,
                     }}

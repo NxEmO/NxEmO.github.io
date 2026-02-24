@@ -20,11 +20,11 @@ export default function Skills() {
           <div key={i}>
             <div
               style={{
-                fontFamily: "var(--mono)",
-                fontSize: 10,
-                color: "var(--text-3)",
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
+              fontFamily: "var(--mono)",
+              fontSize: 11,
+              color: "var(--text-3)",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
                 marginBottom: 10,
                 display: "flex",
                 alignItems: "center",
