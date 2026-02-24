@@ -38,7 +38,7 @@ export default function Sidebar() {
           )
         )}
       </a>
-      <div className="sidebar-tagline">Graphics / Engine Dev</div>
+      <div className="sidebar-tagline">Game Dev</div>
 
       {/* Nav */}
       <nav className="sidebar-nav">

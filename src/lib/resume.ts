@@ -1,8 +1,8 @@
 export const profile = {
   name: "NxEmO",
   nameReal: "You-know-Who",
-  title: "游戏引擎开发",
-  subtitle: "UE5 · Unity",
+  title: "游戏客户端",
+  subtitle: "Unity",
   email: "439534716@qq.com",
   phone: "test",
   github: "https://github.com/NxEmO",
@@ -10,8 +10,8 @@ export const profile = {
 
 export const education = [
   {
-    school: "华南理工大学",
-    badge: "985 · 双一流",
+    school: "山西大学",
+    badge: "双一流",
     degree: "本科 · 软件工程",
     period: "2024.09 — 至今",
   },
@@ -46,22 +46,6 @@ export const experiences = [
       },
     ],
   },
-  {
-    company: "腾讯 IEG",
-    department: "游戏前沿技术部",
-    role: "腾讯引擎图形学远程人才培养计划",
-    period: "2024 — 2025",
-    highlights: [
-      {
-        title: "硬件光线追踪光照烘焙器开发",
-        desc: "参与并深度开发基于 DXR 硬件光线追踪的自研光照烘焙器，负责扩展材质采样模型，新增对半透明材质、薄玻璃等复杂能量传输路径的支持，完善光线在非不透明介质中的传输与衰减计算，为高质量间接光结果提供更准确的材质响应基础。",
-      },
-      {
-        title: "现代 GI 算法研究与工程实践",
-        desc: "系统研究并实践 ReSTIR GI / ReSTIR DI / DDGI 等现代全局光照技术，深入理解各方案的采样策略、收敛特性与工程约束；熟悉 DXR 与 NVIDIA OptiX 完整工作流，具备从加速结构构建、光线调度、着色到降噪协同的全链路工程级理解与实践经验。",
-      },
-    ],
-  },
 ];
 
 export const skills = [
@@ -71,18 +55,13 @@ export const skills = [
   },
   {
     category: "引擎与语言",
-    items: ["UE5 / Unreal Engine", "C++", "HLSL / GLSL", "Python"],
+    items: ["Unity", "C++", "HLSL / GLSL", "C#","Lua",],
   },
   {
     category: "渲染技术",
     items: [
       "全局光照 (GI)",
-      "路径追踪",
-      "ReSTIR GI / DI",
-      "DDGI",
       "Nanite",
-      "光照烘焙",
-      "实时光追",
     ],
   },
   {

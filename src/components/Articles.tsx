@@ -56,7 +56,7 @@ export default function Articles() {
           Writing
         </div>
         <a
-          href="https://www.zhihu.com/people/wrm-66-76"
+          href="https://www.zhihu.com/people/ran-dian-lan"
           target="_blank"
           rel="noopener noreferrer"
           className="view-all-btn"
@@ -246,7 +246,7 @@ function EmptyState() {
       <div>
         // 前往{" "}
         <a
-          href="https://www.zhihu.com/people/wrm-66-76"
+          href="https://www.zhihu.com/people/ran-dian-lan"
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "var(--accent)", textDecoration: "none" }}
