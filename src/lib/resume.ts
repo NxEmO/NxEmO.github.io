@@ -22,7 +22,7 @@ export const education = [
 export const experiences = [
   {
     company: "腾讯 IEG",
-    department: "天美 G 工作室",
+    department: "天美 G1 工作室",
     role: "游戏引擎开发实习生（UE5）",
     period: "2025.05 — 至今",
     highlights: [

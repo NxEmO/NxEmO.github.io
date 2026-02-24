@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 
 const links = [
-  { href: "#home", label: "首页" },
   { href: "#experience", label: "经历" },
   { href: "#skills", label: "技能" },
   { href: "#articles", label: "文章" },
@@ -14,7 +13,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -27,18 +26,16 @@ export default function Navbar() {
         left: 0,
         right: 0,
         zIndex: 100,
-        transition: "background 0.3s, border-color 0.3s",
-        background: scrolled ? "rgba(8,12,20,0.92)" : "transparent",
-        borderBottom: scrolled ? "1px solid #1e2d45" : "1px solid transparent",
-        backdropFilter: scrolled ? "blur(12px)" : "none",
+        background: scrolled ? "rgba(14,17,23,0.9)" : "transparent",
+        borderBottom: scrolled ? "1px solid #2a3347" : "1px solid transparent",
+        backdropFilter: scrolled ? "blur(10px)" : "none",
+        transition: "background 0.25s, border-color 0.25s",
       }}
     >
       <div
+        className="container"
         style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          padding: "0 24px",
-          height: 64,
+          height: 56,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -47,20 +44,17 @@ export default function Navbar() {
         <a
           href="#home"
           style={{
-            fontWeight: 700,
-            fontSize: "1.1rem",
+            fontFamily: "var(--mono)",
+            fontSize: 13,
+            fontWeight: 500,
+            color: "var(--text-1)",
             textDecoration: "none",
-            background: "linear-gradient(135deg, #38bdf8, #818cf8)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
           }}
         >
-          王若淼
+          wrm<span style={{ color: "var(--accent)" }}>.</span>io
         </a>
 
-        {/* Desktop nav */}
-        <nav style={{ display: "flex", gap: 32 }} className="desktop-nav">
+        <nav style={{ display: "flex", gap: 28 }} className="desktop-nav">
           {links.map((l) => (
             <a key={l.href} href={l.href} className="nav-link">
               {l.label}
@@ -68,7 +62,6 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Mobile hamburger */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="mobile-menu-btn"
@@ -77,32 +70,33 @@ export default function Navbar() {
             border: "none",
             cursor: "pointer",
             display: "none",
-            padding: 8,
-            color: "#94a3b8",
+            color: "var(--text-2)",
+            padding: 4,
           }}
           aria-label="菜单"
         >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             {menuOpen ? (
-              <path d="M4 4l14 14M4 18L18 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
+              <path
+                fillRule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              />
             ) : (
-              <>
-                <rect y="4" width="22" height="2" rx="1" />
-                <rect y="10" width="22" height="2" rx="1" />
-                <rect y="16" width="22" height="2" rx="1" />
-              </>
+              <path
+                fillRule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              />
             )}
           </svg>
         </button>
       </div>
 
-      {/* Mobile dropdown */}
       {menuOpen && (
         <div
           style={{
-            background: "rgba(8,12,20,0.98)",
-            borderBottom: "1px solid #1e2d45",
-            padding: "16px 24px 24px",
+            background: "var(--bg)",
+            borderBottom: "1px solid var(--border)",
+            padding: "12px 24px 20px",
           }}
         >
           {links.map((l) => (
@@ -112,11 +106,12 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               style={{
                 display: "block",
-                padding: "12px 0",
-                color: "#94a3b8",
+                padding: "11px 0",
+                borderBottom: "1px solid var(--border-light)",
+                fontFamily: "var(--mono)",
+                fontSize: 13,
+                color: "var(--text-2)",
                 textDecoration: "none",
-                fontSize: "1rem",
-                borderBottom: "1px solid #1e2d45",
               }}
             >
               {l.label}
@@ -124,7 +119,6 @@ export default function Navbar() {
           ))}
         </div>
       )}
-
     </header>
   );
 }

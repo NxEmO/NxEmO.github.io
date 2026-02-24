@@ -1,24 +1,39 @@
-import { profile } from "@/lib/resume";
-
 export default function Footer() {
   return (
     <footer
       style={{
-        borderTop: "1px solid #1e2d45",
-        padding: "32px 24px",
-        textAlign: "center",
-        color: "#475569",
-        fontSize: "0.8rem",
+        borderTop: "1px solid var(--border-light)",
+        padding: "24px 0",
       }}
     >
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-        <p>
-          © {new Date().getFullYear()} {profile.name} · 构建于 Next.js 15 ·
-          自动部署至 GitHub Pages
-        </p>
-        <p style={{ marginTop: 6, color: "#334155" }}>
-          知乎文章由 GitHub Actions 每日自动同步
-        </p>
+      <div
+        className="container"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: 8,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            color: "var(--text-3)",
+          }}
+        >
+          王若淼 · {new Date().getFullYear()}
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 11,
+            color: "var(--text-3)",
+          }}
+        >
+          Built with Next.js · 知乎文章每日自动同步
+        </span>
       </div>
     </footer>
   );
