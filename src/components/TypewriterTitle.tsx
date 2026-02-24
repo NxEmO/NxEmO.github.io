@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 
-const NAMES = ["Land1ngW", "王若淼", "Ruomiao Wang"];
+const NAMES = ["Whither Studio", "NxEmO", "Test Name"];
 const TYPE_MS = 110;
 const DELETE_MS = 65;
 const PAUSE_MS = 3500;
 const GLITCH_CHARS = "!<>-_\\/[]{}—=+*^?#$@%&";
 
 export default function TypewriterTitle() {
-  const [displayed, setDisplayed] = useState("Land1ngW");
+  const [displayed, setDisplayed] = useState("Whither Studio");
   const [nameIdx, setNameIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [cursorOn, setCursorOn] = useState(true);
