@@ -3,11 +3,11 @@ export default function Footer() {
     <footer
       style={{
         borderTop: "1px solid var(--border-light)",
-        padding: "24px 0",
+        padding: "28px 0 48px",
+        marginTop: 20,
       }}
     >
       <div
-        className="container"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -16,22 +16,10 @@ export default function Footer() {
           gap: 8,
         }}
       >
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 11,
-            color: "var(--text-3)",
-          }}
-        >
-          王若淼 · {new Date().getFullYear()}
+        <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--text-3)" }}>
+          Land1ngW · {new Date().getFullYear()}
         </span>
-        <span
-          style={{
-            fontFamily: "var(--mono)",
-            fontSize: 11,
-            color: "var(--text-3)",
-          }}
-        >
+        <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--text-3)" }}>
           Built with Next.js · 知乎文章每日自动同步
         </span>
       </div>

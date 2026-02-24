@@ -1,4 +1,5 @@
-import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+import MobileTopbar from "@/components/MobileTopbar";
 import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
@@ -7,15 +8,16 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <>
-      <Navbar />
-      <main>
+    <div className="shell">
+      <Sidebar />
+      <MobileTopbar />
+      <main className="main-content">
         <Hero />
         <Experience />
         <Skills />
         <Articles />
+        <Footer />
       </main>
-      <Footer />
-    </>
+    </div>
   );
 }

@@ -1,13 +1,12 @@
 export const profile = {
-  name: "王若淼",
-  nameEn: "Wang Ruomiao",
-  title: "游戏引擎开发 / 图形程序工程师",
+  name: "Land1ngW",
+  nameReal: "王若淼",
+  title: "游戏引擎开发 / 图形渲染工程师",
   subtitle: "UE5 · 全局光照 · 渲染管线 · 光线追踪",
   email: "1738832489@qq.com",
   phone: "17304471585",
   zhihu: "https://www.zhihu.com/people/wrm-66-76",
-  github: "https://github.com",
-  avatar: null,
+  github: "https://github.com/LandingW",
 };
 
 export const education = [
@@ -27,20 +26,24 @@ export const experiences = [
     period: "2025.05 — 至今",
     highlights: [
       {
-        title: "全局光照系统核心模块开发",
-        desc: "独立负责面向中低算力平台的自研 GI 烘焙管线开发，将 Skylight Visibility 从运行时解耦为离线预计算，替代 UE DFAO，显著降低动态天光运行时开销，同时兼容 TOD，解决漏光与性能瓶颈问题；设计并实现 Probe 自适应偏移与有效性评估机制，提升间接光数据在复杂几何场景下的可靠性。",
+        title: "独立支撑 G1 预研 3A 项目 GI 方案落地",
+        desc: "作为核心开发者，独立承担 G1 工作室预研 3A 项目全局光照技术方案的设计与工程落地。从零搭建适配中低算力平台的自研 GI 烘焙管线，将 Skylight Visibility 从运行时解耦为离线预计算，彻底替代 UE 原生 DFAO 方案；同时兼容 TOD（Time of Day）动态天光变化，系统性解决了漏光、性能瓶颈与画面稳定性问题，方案已通过项目组技术评审并进入集成阶段。",
       },
       {
-        title: "大规模场景 GI 数据流式加载与内存优化",
-        desc: "针对超大世界场景内存与显存压力，设计并实现基于视距与重要度的独立 GI 数据 Streaming 机制，在给定预设 atlas 容忍度下异步排序、自适应加载重要探针详细数据，避免因场景加载/卸载引发的渲染线程卡顿。",
+        title: "Probe 自适应偏移与有效性评估系统",
+        desc: "针对复杂几何场景下光照探针数据不稳定的共性问题，设计并实现 Probe 自适应偏移与有效性评估机制。通过对探针周围几何遮挡关系的离线分析，动态调整探针采样位置，配合有效性权重剔除无效探针数据，显著提升间接光结果在角色走廊、密集建筑等复杂场景下的可靠性与视觉稳定性。",
       },
       {
-        title: "管线定制与美术工作流赋能",
-        desc: "针对 UE Nanite 架构下 VisBuffer 无法兼容传统特效渲染的痛点，通过定制 MeshDrawCommand 生成流程与 Primitive 收集逻辑，在保留 Nanite 高保真几何细节的同时实现了特效所需的深度/模板测试与交互逻辑。",
+        title: "大规模场景 GI 数据流式加载与显存优化",
+        desc: "针对预研 3A 项目超大开放世界地图的内存与显存压力，将全局光照系统与场景分块逻辑解耦，设计基于视距与探针重要度的独立 GI Streaming 机制。在给定 atlas 预算下进行异步优先级排序，自适应加载近场高精度探针数据，有效消除因场景流式加载/卸载引发的渲染线程帧率抖动，同时保证视觉质量不降级。",
       },
       {
-        title: "技术沉淀与团队赋能",
-        desc: "深度撰写多篇涵盖 UE 管线定制、UE 模块源码解析、技术实现细节等技术文档，多次获选公司级技术精选/头条推荐，有效提升团队技术复用率。",
+        title: "Nanite 架构下特效渲染管线定制",
+        desc: "针对 UE Nanite VisBuffer 架构无法直接兼容传统粒子特效渲染的深层痛点，深入 UE 渲染管线底层，定制 MeshDrawCommand 生成流程与 Primitive 收集逻辑，在完整保留 Nanite 虚拟几何高保真细节的前提下，成功支持特效所需的深度写入、模板测试与交互逻辑，打通了美术特效工作流与 Nanite 场景的协作瓶颈。",
+      },
+      {
+        title: "技术沉淀与跨团队输出",
+        desc: "结合项目实战，深度撰写多篇涵盖 UE 管线定制、GI 系统架构、源码模块解析的技术文档，多次入选公司级技术精选与头条推荐，有效沉淀了可复用的工程知识资产，并在跨项目组技术分享中获得正向反馈。",
       },
     ],
   },
@@ -51,12 +54,12 @@ export const experiences = [
     period: "2024 — 2025",
     highlights: [
       {
-        title: "基于光线追踪的光照烘焙器开发",
-        desc: "参与并深度开发基于硬件光线追踪的自研光照烘焙器，扩展材质采样模型，支持半透明、薄玻璃等复杂能量传输路径，完善光线在非不透明介质中的传输与衰减计算。",
+        title: "硬件光线追踪光照烘焙器开发",
+        desc: "参与并深度开发基于 DXR 硬件光线追踪的自研光照烘焙器，负责扩展材质采样模型，新增对半透明材质、薄玻璃等复杂能量传输路径的支持，完善光线在非不透明介质中的传输与衰减计算，为高质量间接光结果提供更准确的材质响应基础。",
       },
       {
-        title: "全局光照与光线追踪技术积累",
-        desc: "系统性理解并实践 ReSTIR GI / ReSTIR DI / DDGI 等现代 GI 技术方案，熟悉 DXR 与 NVIDIA OptiX 光线追踪工作流，对完整光线追踪渲染管线具备工程级理解与实践经验。",
+        title: "现代 GI 算法研究与工程实践",
+        desc: "系统研究并实践 ReSTIR GI / ReSTIR DI / DDGI 等现代全局光照技术，深入理解各方案的采样策略、收敛特性与工程约束；熟悉 DXR 与 NVIDIA OptiX 完整工作流，具备从加速结构构建、光线调度、着色到降噪协同的全链路工程级理解与实践经验。",
       },
     ],
   },
@@ -80,6 +83,7 @@ export const skills = [
       "DDGI",
       "Nanite",
       "光照烘焙",
+      "实时光追",
     ],
   },
   {
@@ -104,4 +108,11 @@ export const skills = [
       "AI 辅助工程（Cursor / Gemini CLI）",
     ],
   },
+];
+
+export const navSections = [
+  { id: "home", label: "Home" },
+  { id: "experience", label: "Experience" },
+  { id: "skills", label: "Skills" },
+  { id: "articles", label: "Writing" },
 ];
