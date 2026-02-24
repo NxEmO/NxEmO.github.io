@@ -1,4 +1,5 @@
 import { experiences } from "@/lib/resume";
+import FadeUp from "./FadeUp";
 
 export default function Experience() {
   return (
@@ -7,7 +8,7 @@ export default function Experience() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
         {experiences.map((exp, i) => (
-          <div key={i}>
+          <FadeUp key={i} delay={i * 80}>
             {/* Job header */}
             <div className="glass-card" style={{ padding: "20px 24px", marginBottom: 24 }}>
               <div
@@ -101,7 +102,7 @@ export default function Experience() {
             {i < experiences.length - 1 && (
               <hr className="divider" style={{ marginBottom: 52 }} />
             )}
-          </div>
+          </FadeUp>
         ))}
       </div>
     </section>

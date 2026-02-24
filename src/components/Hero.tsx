@@ -1,10 +1,14 @@
 import { profile, education } from "@/lib/resume";
+import TypewriterTitle from "./TypewriterTitle";
+import FadeUp from "./FadeUp";
 
 export default function Hero() {
   return (
     <section id="home" className="section" style={{ paddingTop: 80, paddingBottom: 0 }}>
-      {/* Status */}
-      <div
+
+      {/* ① Status badge — immediate, delay 0 */}
+      <FadeUp immediate delay={0}>
+        <div
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -15,128 +19,107 @@ export default function Hero() {
             border: "1px solid rgba(52,211,153,0.2)",
             marginBottom: 20,
           }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: "50%",
-            background: "var(--green)",
-            boxShadow: "0 0 6px var(--green)",
-            display: "inline-block",
-          }}
-        />
-        <span style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--green)" }}>
-          在职实习 · 腾讯 IEG 天美 G1
-        </span>
-      </div>
+        >
+          <span className="status-dot" />
+          <span style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--green)" }}>
+            在职实习 · 腾讯 IEG 天美 G1
+          </span>
+        </div>
+      </FadeUp>
 
-      {/* Name */}
-      <h1
-        style={{
-          fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)",
-          fontWeight: 800,
-          letterSpacing: "-0.03em",
-          lineHeight: 1.1,
-          marginBottom: 14,
-          fontFamily: "var(--mono)",
-        }}
-      >
-        Land
-        <span
+      {/* ② Typewriter title — immediate, delay 120 */}
+      <FadeUp immediate delay={120}>
+        <TypewriterTitle />
+      </FadeUp>
+
+      {/* ③ Role / subtitle — immediate, delay 240 */}
+      <FadeUp immediate delay={240}>
+        <p
           style={{
-            color: "var(--accent)",
-            textShadow: "0 0 20px rgba(96,165,250,0.4)",
+            fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
+            color: "var(--text-2)",
+            marginBottom: 8,
+            lineHeight: 1.5,
           }}
         >
-          1
-        </span>
-        ngW
-      </h1>
+          游戏引擎开发 · 图形渲染工程师
+        </p>
+        <p
+          style={{
+            fontFamily: "var(--mono)",
+            fontSize: 13,
+            color: "var(--text-3)",
+            marginBottom: 36,
+            letterSpacing: "0.04em",
+          }}
+        >
+          UE5 &nbsp;·&nbsp; Global Illumination &nbsp;·&nbsp; Ray Tracing
+        </p>
+      </FadeUp>
 
-      {/* Role */}
-      <p
-        style={{
-          fontSize: "clamp(0.9rem, 1.8vw, 1.05rem)",
-          color: "var(--text-2)",
-          marginBottom: 8,
-          lineHeight: 1.5,
-        }}
-      >
-        游戏引擎开发 · 图形渲染工程师
-      </p>
-      <p
-        style={{
-          fontFamily: "var(--mono)",
-          fontSize: 13,
-          color: "var(--text-3)",
-          marginBottom: 36,
-          letterSpacing: "0.04em",
-        }}
-      >
-        UE5 &nbsp;·&nbsp; Global Illumination &nbsp;·&nbsp; Ray Tracing
-      </p>
+      {/* ④ Contacts — immediate, delay 360 */}
+      <FadeUp immediate delay={360}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginBottom: 44 }}>
+          <a href={`mailto:${profile.email}`} className="contact-link">
+            <MailIcon />
+            {profile.email}
+          </a>
+          <a href={profile.zhihu} target="_blank" rel="noopener noreferrer" className="contact-link">
+            <ZhihuIcon />
+            知乎
+          </a>
+          <a href={profile.github} target="_blank" rel="noopener noreferrer" className="contact-link">
+            <GithubIcon />
+            GitHub
+          </a>
+        </div>
+      </FadeUp>
 
-      {/* Contacts */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 20, marginBottom: 44 }}>
-        <a href={`mailto:${profile.email}`} className="contact-link">
-          <MailIcon />
-          {profile.email}
-        </a>
-        <a href={profile.zhihu} target="_blank" rel="noopener noreferrer" className="contact-link">
-          <ZhihuIcon />
-          知乎
-        </a>
-        <a href={profile.github} target="_blank" rel="noopener noreferrer" className="contact-link">
-          <GithubIcon />
-          GitHub
-        </a>
-      </div>
-
-      {/* Education */}
-      <div
-        className="glass-card"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 14,
-          padding: "14px 20px",
-          marginBottom: 80,
-        }}
-      >
-        <span style={{ fontSize: 22 }}>🎓</span>
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-1)" }}>
-              {education[0].school}
-            </span>
-            <span
+      {/* ⑤ Education card — immediate, delay 480 */}
+      <FadeUp immediate delay={480}>
+        <div
+          className="glass-card"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 14,
+            padding: "14px 20px",
+            marginBottom: 80,
+          }}
+        >
+          <span style={{ fontSize: 22 }}>🎓</span>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-1)" }}>
+                {education[0].school}
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--mono)",
+                  fontSize: 11,
+                  color: "var(--accent)",
+                  background: "var(--accent-dim)",
+                  border: "1px solid rgba(96,165,250,0.2)",
+                  borderRadius: 4,
+                  padding: "2px 8px",
+                }}
+              >
+                {education[0].badge}
+              </span>
+            </div>
+            <div
               style={{
                 fontFamily: "var(--mono)",
-                fontSize: 10,
-                color: "var(--accent)",
-                background: "var(--accent-dim)",
-                border: "1px solid rgba(96,165,250,0.2)",
-                borderRadius: 4,
-                padding: "1px 7px",
+                fontSize: 12,
+                color: "var(--text-3)",
+                marginTop: 3,
               }}
             >
-              {education[0].badge}
-            </span>
-          </div>
-          <div
-            style={{
-              fontFamily: "var(--mono)",
-              fontSize: 12,
-              color: "var(--text-3)",
-              marginTop: 3,
-            }}
-          >
-            {education[0].degree} &nbsp;·&nbsp; {education[0].period}
+              {education[0].degree} &nbsp;·&nbsp; {education[0].period}
+            </div>
           </div>
         </div>
-      </div>
-
+      </FadeUp>
     </section>
   );
 }

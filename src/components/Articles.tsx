@@ -132,14 +132,10 @@ function ArticleRow({
     >
       {/* Thumbnail */}
       <div
+        className="article-thumb"
         style={{
           width: 96,
           height: 64,
-          flexShrink: 0,
-          borderRadius: 6,
-          overflow: "hidden",
-          background: "var(--bg-subtle)",
-          border: "1px solid var(--border-light)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -150,12 +146,6 @@ function ArticleRow({
           <img
             src={article.thumbnail!}
             alt={article.title}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
           />
         ) : (
           <svg

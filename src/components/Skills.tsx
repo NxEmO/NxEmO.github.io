@@ -1,4 +1,5 @@
 import { skills } from "@/lib/resume";
+import FadeUp from "./FadeUp";
 
 export default function Skills() {
   return (
@@ -16,8 +17,8 @@ export default function Skills() {
           gap: "32px 40px",
         }}
       >
-        {skills.map((group, i) => (
-          <div key={i}>
+          {skills.map((group, i) => (
+            <FadeUp key={i} delay={i * 60}>
             <div
               style={{
               fontFamily: "var(--mono)",
@@ -50,8 +51,8 @@ export default function Skills() {
                 </span>
               ))}
             </div>
-          </div>
-        ))}
+            </FadeUp>
+          ))}
       </div>
     </section>
   );
