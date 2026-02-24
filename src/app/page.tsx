@@ -12,11 +12,13 @@ export default function Home() {
       <Sidebar />
       <MobileTopbar />
       <main className="main-content">
-        <Hero />
-        <Experience />
-        <Skills />
-        <Articles />
-        <Footer />
+        <div className="main-inner">
+          <Hero />
+          <Experience />
+          <Skills />
+          <Articles />
+          <Footer />
+        </div>
       </main>
     </div>
   );

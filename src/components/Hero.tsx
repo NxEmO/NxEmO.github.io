@@ -3,29 +3,6 @@ import { profile, education } from "@/lib/resume";
 export default function Hero() {
   return (
     <section id="home" className="section" style={{ paddingTop: 80, paddingBottom: 0 }}>
-      {/* Avatar placeholder / monogram */}
-      <div style={{ marginBottom: 28 }}>
-        <div
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: 14,
-            background: "linear-gradient(135deg, rgba(96,165,250,0.2), rgba(167,139,250,0.2))",
-            border: "1px solid rgba(96,165,250,0.25)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontFamily: "var(--mono)",
-            fontSize: 20,
-            fontWeight: 700,
-            color: "var(--accent)",
-            backdropFilter: "blur(6px)",
-          }}
-        >
-          L
-        </div>
-      </div>
-
       {/* Status */}
       <div
         style={{
@@ -160,25 +137,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll hint */}
-      <div
-        className="scroll-bounce"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 7,
-          color: "var(--text-3)",
-          fontFamily: "var(--mono)",
-          fontSize: 10,
-          letterSpacing: "0.08em",
-          marginBottom: 80,
-        }}
-      >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-          <path d="M12 5v14M5 12l7 7 7-7" />
-        </svg>
-        scroll down
-      </div>
     </section>
   );
 }

@@ -34,11 +34,14 @@ body {
   min-height: 100vh;
 }
 
-/* ── Background image ── */
+/* ── Background image (centered in right content area) ── */
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: var(--sidebar-w);
+  right: 0;
+  bottom: 0;
   background: url("/back.jpg") center center / cover no-repeat;
   opacity: 0.07;
   pointer-events: none;
@@ -160,8 +163,15 @@ body::after {
 .main-content {
   margin-left: var(--sidebar-w);
   flex: 1;
-  max-width: 780px;
-  padding: 0 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-inner {
+  width: 100%;
+  max-width: 700px;
+  padding: 0 40px;
 }
 
 /* ── Section ── */
@@ -301,7 +311,9 @@ body::after {
 @media (max-width: 768px) {
   .sidebar { display: none; }
   .mobile-topbar { display: flex !important; }
-  .main-content { margin-left: 0; padding: 0 20px; }
+  .main-content { margin-left: 0; }
+  .main-inner { padding: 0 20px; }
+  body::before { left: 0; }
 }
 
 .mobile-topbar {
