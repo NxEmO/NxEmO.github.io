@@ -1,4 +1,5 @@
 import articlesData from "../../data/articles.json";
+import FadeUp from "./FadeUp";
 
 interface Article {
   id: number;
@@ -94,11 +95,12 @@ export default function Articles() {
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           {articles.map((article, i) => (
-            <ArticleRow
-              key={article.id}
-              article={article}
-              isLast={i === articles.length - 1}
-            />
+            <FadeUp key={article.id} delay={i * 50} spring>
+              <ArticleRow
+                article={article}
+                isLast={i === articles.length - 1}
+              />
+            </FadeUp>
           ))}
         </div>
       )}

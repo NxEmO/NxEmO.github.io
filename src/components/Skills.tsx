@@ -18,7 +18,7 @@ export default function Skills() {
         }}
       >
           {skills.map((group, i) => (
-            <FadeUp key={i} delay={i * 60}>
+            <FadeUp key={i} delay={i * 60} spring>
             <div
               style={{
               fontFamily: "var(--mono)",

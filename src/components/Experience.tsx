@@ -8,7 +8,7 @@ export default function Experience() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
         {experiences.map((exp, i) => (
-          <FadeUp key={i} delay={i * 80}>
+          <FadeUp key={i} delay={i * 100} spring>
             {/* Job header */}
             <div className="glass-card" style={{ padding: "20px 24px", marginBottom: 24 }}>
               <div
