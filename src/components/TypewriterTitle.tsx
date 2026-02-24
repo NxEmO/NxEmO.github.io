@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 
 const NAMES = ["Land1ngW", "王若淼", "Ruomiao Wang"];
-const TYPE_MS = 85;
-const DELETE_MS = 48;
-const PAUSE_MS = 2000;
+const TYPE_MS = 110;
+const DELETE_MS = 65;
+const PAUSE_MS = 3500;
 
 export default function TypewriterTitle() {
   const [displayed, setDisplayed] = useState("Land1ngW");
