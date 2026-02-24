@@ -69,10 +69,6 @@ export default function Sidebar() {
           <a href={`mailto:${profile.email}`}>{profile.email}</a>
         </div>
         <div>
-          <a href={profile.zhihu} target="_blank" rel="noopener noreferrer">
-            Zhihu ↗
-          </a>
-          &ensp;·&ensp;
           <a href={profile.github} target="_blank" rel="noopener noreferrer">
             GitHub ↗
           </a>
