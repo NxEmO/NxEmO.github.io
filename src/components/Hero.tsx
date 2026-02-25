@@ -22,7 +22,7 @@ export default function Hero() {
         >
           <span className="status-dot" />
           <span style={{ fontFamily: "var(--mono)", fontSize: 13, color: "var(--green)" }}>
-            在职实习 · 腾讯 IEG 天美 G1
+            待修改
           </span>
         </div>
       </FadeUp>
