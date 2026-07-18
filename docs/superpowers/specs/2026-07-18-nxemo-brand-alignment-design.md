@@ -17,7 +17,9 @@
 
 - 删除 `Test Name`、`You-know-Who`、`phone: "test"` 和“待修改”等测试内容。
 - 删除未实现的“知乎文章每日自动同步”声明。
-- Writing 暂时保留为可扩展区域，但占位文案改为真实、简洁的“内容整理中”，不再显示源码式 disabled 注释。
+- 删除来自原主页作者的职位头衔、教育、工作经历、技能和文章内容，避免将他人的履历归属于 NxEmO。
+- 在 NxEmO 尚未提供自己的履历和作品前，不显示 Experience、Skills、Writing 导航或空白板块。
+- 首屏只使用已确认的定位 `Game Developer · Whither Studio`，不声称未经确认的公司、学校或技术专长。
 - README 保留并强化对 Land1ngW 的来源说明，同时更新实际使用的 Next.js 版本和当前功能状态。
 
 ## Interaction and accessibility
@@ -30,7 +32,7 @@
 ## Code quality
 
 - 删除未使用的知乎图标与移动端菜单状态。
-- 修复 Writing 占位内容造成的 JSX lint 错误。
+- 删除不再使用的履历数据和 Experience、Skills、Articles 组件引用。
 - 不重构现有组件体系，不增加博客、项目展示、联系方式或工作室独立页面。
 - 保持 Next.js 静态导出和现有 GitHub Pages 部署方式。
 
@@ -43,7 +45,7 @@
 
 ## Out of scope
 
-- 新增作品集卡片或可视化项目案例。
+- 新增 NxEmO 尚未提供的履历、技能、作品集卡片或可视化项目案例。
 - 接入知乎同步、博客系统、CMS 或独立域名。
 - 重写整体视觉设计。
 - 发布、推送或修改 GitHub Pages 线上环境。
