@@ -14,7 +14,7 @@
   --purple: #a78bfa;
   --text-1: #e8edf5;
   --text-2: #8896aa;
-  --text-3: #4a5568;
+  --text-3: #74839a;
   --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace;
   --sidebar-w: 220px;
 }
@@ -411,3 +411,14 @@ body::after {
   transition: color 0.15s;
 }
 .mobile-nav-link:hover { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
