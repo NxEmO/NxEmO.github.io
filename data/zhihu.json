@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "https://zhuanlan.zhihu.com/p/2072701628143104921",
+    "title": "文章测试",
+    "excerpt": "测试API是否跑通",
+    "publishedAt": "2026-08-17T07:10:06.000Z",
+    "source": "zhihu",
+    "externalUrl": "https://zhuanlan.zhihu.com/p/2072701628143104921"
+  }
+]
