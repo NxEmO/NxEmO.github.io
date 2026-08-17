@@ -15,6 +15,18 @@ test("writing index and homepage mount the unified writing section", () => {
   assert.match(section, /No writing yet/);
 });
 
+test("sidebar provides home and writing navigation with active paths", () => {
+  const sidebar = read("src/components/Sidebar.tsx");
+
+  assert.match(sidebar, /usePathname/);
+  assert.match(sidebar, /import Link from "next\/link"/);
+  assert.match(sidebar, /href="\//);
+  assert.match(sidebar, /href="\/writing\//);
+  assert.match(sidebar, /<Link href="\//);
+  assert.match(sidebar, /sidebar-link active/);
+  assert.match(sidebar, /startsWith\("\/articles\/"\)/);
+});
+
 test("article cards label sources and protect external links", () => {
   const card = read("src/components/ArticleCard.tsx");
 

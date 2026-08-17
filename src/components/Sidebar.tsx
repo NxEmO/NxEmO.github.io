@@ -1,14 +1,31 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { profile } from "@/lib/resume";
 
 export default function Sidebar() {
+  const pathname = usePathname() ?? "/";
+  const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+  const homeActive = normalizedPath === "/";
+  const writingActive =
+    normalizedPath === "/writing" || normalizedPath.startsWith("/articles/");
+
   return (
     <aside className="sidebar">
-      <a href="#home" className="sidebar-brand">
+      <Link href="/" className="sidebar-brand">
         {profile.name}
-      </a>
+      </Link>
       <div className="sidebar-tagline">{profile.studio}</div>
 
-      <div className="sidebar-nav" aria-hidden="true" />
+      <nav className="sidebar-nav" aria-label="Primary navigation">
+        <Link className={homeActive ? "sidebar-link active" : "sidebar-link"} href="/">
+          Home
+        </Link>
+        <Link className={writingActive ? "sidebar-link active" : "sidebar-link"} href="/writing/">
+          Writing
+        </Link>
+      </nav>
 
       <div className="sidebar-footer">
         <div>
