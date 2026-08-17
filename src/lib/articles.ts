@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
+import { mergeArticleSummaries, normalizeZhihuArticles } from "./zhihu.mjs";
 
 export type ArticleSummary = {
   id: string;
@@ -21,6 +22,7 @@ export type LocalArticle = ArticleSummary & {
 };
 
 export const ARTICLES_DIRECTORY = path.join(process.cwd(), "content", "articles");
+export const ZHIHU_SNAPSHOT_PATH = path.join(process.cwd(), "data", "zhihu.json");
 
 function requiredString(data: Record<string, unknown>, key: string, filename: string) {
   const value = data[key];
@@ -94,3 +96,17 @@ export async function getLocalArticle(slug: string): Promise<LocalArticle | null
   return article ?? null;
 }
 
+export async function getZhihuArticleSummaries(): Promise<ArticleSummary[]> {
+  try {
+    const snapshot = JSON.parse(await fs.readFile(ZHIHU_SNAPSHOT_PATH, "utf8")) as unknown;
+    return normalizeZhihuArticles(snapshot);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  }
+}
+
+export async function getWritingSummaries(): Promise<ArticleSummary[]> {
+  const [local, zhihu] = await Promise.all([getLocalArticleSummaries(), getZhihuArticleSummaries()]);
+  return mergeArticleSummaries(local, zhihu);
+}
