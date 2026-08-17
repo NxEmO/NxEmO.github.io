@@ -5,4 +5,3 @@ export const profile = {
   github: "https://github.com/NxEmO",
 };
 
-export const navSections = [{ id: "home", label: "Home" }];

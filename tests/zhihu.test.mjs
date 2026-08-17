@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 
-const { normalizeZhihuApiResponse, normalizeZhihuArticles, mergeArticleSummaries } = await import("../src/lib/zhihu.ts");
+const { normalizeZhihuApiResponse, normalizeZhihuArticles, mergeArticleSummaries } = await import("../src/lib/zhihu.mjs");
 const { syncZhihu } = await import("../scripts/sync-zhihu.mjs");
 
 test("normalizes and deduplicates Zhihu article records", () => {
