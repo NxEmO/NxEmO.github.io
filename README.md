@@ -2,6 +2,8 @@
 
 NxEmO 的个人主页与 Whither Studio 的线上入口，使用 Next.js 16 构建，并通过 GitHub Pages 发布静态文件。
 
+视觉设计基于 Land1ngW 的主页设计，并按 NxEmO / Whither Studio 的品牌信息重新整理。
+
 ## Local articles
 
 完整的站内文章放在 `content/articles/`，每篇文章是一个 Markdown 文件：
@@ -40,4 +42,3 @@ npm run lint
 npm run build
 npm run sync:zhihu
 ```
-

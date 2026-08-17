@@ -88,7 +88,11 @@ export async function loadLocalArticles(directory = ARTICLES_DIRECTORY): Promise
 }
 
 export async function getLocalArticleSummaries(): Promise<ArticleSummary[]> {
-  return (await loadLocalArticles()).map(({ html: _html, ...summary }) => summary);
+  return (await loadLocalArticles()).map((article) => {
+    const { html, ...summary } = article;
+    void html;
+    return summary;
+  });
 }
 
 export async function getLocalArticle(slug: string): Promise<LocalArticle | null> {

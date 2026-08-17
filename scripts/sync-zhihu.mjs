@@ -1,6 +1,6 @@
 import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 import { normalizeZhihuArticles } from "../src/lib/zhihu.mjs";
 
 const DEFAULT_SNAPSHOT_PATH = path.resolve("data/zhihu.json");
