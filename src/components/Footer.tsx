@@ -19,7 +19,7 @@ export default function Footer() {
           NxEmO · {new Date().getFullYear()} · Whither Studio
         </span>
         <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: "var(--text-3)" }}>
-          Based on Land1ngW&apos;s design · Built with Next.js
+          Next.js 16 · React 19 · TypeScript · GitHub Pages
         </span>
       </div>
     </footer>

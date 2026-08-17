@@ -28,7 +28,8 @@ test("uses NxEmO as the person and Whither Studio as the studio", () => {
   assert.match(source, /const NAMES = \["NxEmO", "Whither Studio"\]/);
   assert.match(source, /NxEmO · \{new Date\(\)\.getFullYear\(\)\}/);
   assert.match(source, /Whither Studio/);
-  assert.match(source, /Based on Land1ngW(?:'|’|&apos;)s design · Built with Next\.js/);
+  assert.doesNotMatch(source, /Based on Land1ngW(?:'|’|&apos;)s design/);
+  assert.match(source, /Next\.js 16 · React 19 · TypeScript · GitHub Pages/);
 });
 
 test("contains none of the inherited profile or placeholder copy", () => {
