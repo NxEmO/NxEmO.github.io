@@ -1,9 +1,10 @@
 import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { normalizeZhihuArticles } from "../src/lib/zhihu.mjs";
+import { normalizeZhihuApiResponse, normalizeZhihuArticles } from "../src/lib/zhihu.mjs";
 
 const DEFAULT_SNAPSHOT_PATH = path.resolve("data/zhihu.json");
+const DEFAULT_API_URL = "https://developer.zhihu.com/api/v1/user/contents";
 
 async function readExisting(filePath) {
   try {
@@ -15,24 +16,47 @@ async function readExisting(filePath) {
 }
 
 export async function syncZhihu({
-  sourceUrl = process.env.ZHIHU_ARTICLES_URL,
+  sourceUrl = process.env.ZHIHU_API_URL || DEFAULT_API_URL,
   token = process.env.ZHIHU_API_TOKEN,
   snapshotPath = DEFAULT_SNAPSHOT_PATH,
   fetchImpl = fetch,
+  now = () => Math.floor(Date.now() / 1000),
 } = {}) {
-  if (!sourceUrl) {
-    console.log("::notice::ZHIHU_ARTICLES_URL is not configured; keeping the current snapshot.");
+  if (!token) {
+    console.log("::notice::ZHIHU_API_TOKEN is not configured; keeping the current snapshot.");
     return { updated: false, skipped: true, count: 0 };
   }
 
-  const headers = { Accept: "application/json" };
-  if (token) headers.Authorization = `Bearer ${token}`;
-  const response = await fetchImpl(sourceUrl, { headers });
-  if (!response.ok) {
-    throw new Error(`Zhihu sync failed with HTTP ${response.status}`);
+  const allArticles = [];
+  let offset = "0";
+
+  while (true) {
+    const requestUrl = new URL(sourceUrl);
+    requestUrl.searchParams.set("ContentType", "article");
+    requestUrl.searchParams.set("Limit", "50");
+    requestUrl.searchParams.set("SortField", "ts");
+    requestUrl.searchParams.set("SortOrder", "desc");
+    if (offset !== "0") requestUrl.searchParams.set("Offset", offset);
+
+    const headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      "X-Request-Timestamp": String(now()),
+    };
+    const response = await fetchImpl(requestUrl, { headers });
+    if (!response.ok) {
+      throw new Error(`Zhihu sync failed with HTTP ${response.status}`);
+    }
+
+    const page = normalizeZhihuApiResponse(await response.json());
+    allArticles.push(...page.articles);
+    if (page.isEnd || !page.nextOffset) break;
+    if (page.nextOffset === offset) throw new Error("Zhihu API pagination did not advance");
+    offset = page.nextOffset;
   }
 
-  const articles = normalizeZhihuArticles(await response.json());
+  const articles = normalizeZhihuArticles(allArticles);
   const nextSnapshot = `${JSON.stringify(articles, null, 2)}\n`;
   const currentSnapshot = await readExisting(snapshotPath);
   if (currentSnapshot === nextSnapshot) {

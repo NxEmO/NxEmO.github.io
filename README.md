@@ -25,14 +25,15 @@ Article body in Markdown.
 
 ## Zhihu index sync
 
-网站只同步知乎文章的标题、摘要、发布时间和原文链接，不复制知乎全文。GitHub Actions 每天运行 `npm run sync:zhihu`，成功后更新 `data/zhihu.json`，再由部署流程重新构建网站。
+网站只同步知乎文章的标题、摘要、发布时间和原文链接，不复制知乎全文。GitHub Actions 每天运行 `npm run sync:zhihu`，通过知乎开放平台的“用户的内容 API”获取你的文章，成功后更新 `data/zhihu.json`，再由部署流程重新构建网站。
+
+官方接口地址是 `https://developer.zhihu.com/api/v1/user/contents`。获取你自己的内容时，不需要 OAuth Token；同步脚本会自动发送 `ContentType=article`、分页参数和时间戳。
 
 要启用自动同步，请在 GitHub 仓库的 Actions secrets 中配置：
 
-- `ZHIHU_ARTICLES_URL`：你获准使用的知乎官方 API/RSS JSON 地址。
-- `ZHIHU_API_TOKEN`：接口需要授权时使用；不需要授权可省略。
+- `ZHIHU_API_TOKEN`：知乎开放平台个人中心生成的 Access Secret。
 
-同步脚本不会抓取登录页面、Cookie 或浏览器状态。没有配置数据源时会保留当前快照；同步失败也不会清空已有文章。
+同步脚本不会抓取登录页面、Cookie 或浏览器状态。没有配置 Access Secret 时会保留当前快照；同步失败也不会清空已有文章。
 
 ## Commands
 

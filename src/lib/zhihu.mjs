@@ -25,6 +25,27 @@ function normalizeDate(record, index) {
   return date.toISOString();
 }
 
+function normalizeOfficialItem(record, index) {
+  if (!record || typeof record !== "object" || Array.isArray(record)) {
+    throw new Error(`Zhihu API item ${index + 1} must be an object`);
+  }
+
+  const externalUrl = requiredString(record, ["Url", "url"], "an Url", index);
+  const createdAt = Number(record.CreatedAt ?? record.createdAt ?? record.created_at);
+  if (!Number.isFinite(createdAt)) {
+    throw new Error(`Zhihu API item ${index + 1} has an invalid CreatedAt`);
+  }
+
+  return {
+    id: String(record.Id ?? record.id ?? externalUrl),
+    title: requiredString(record, ["Title", "title"], "a Title", index),
+    excerpt: requiredString(record, ["Summary", "summary"], "a Summary", index),
+    publishedAt: new Date(createdAt * 1000).toISOString(),
+    source: "zhihu",
+    externalUrl,
+  };
+}
+
 function deduplicate(items) {
   const ids = new Set();
   const urls = new Set();
@@ -72,7 +93,30 @@ export function normalizeZhihuArticles(input) {
   return newestFirst(deduplicate(articles));
 }
 
+export function normalizeZhihuApiResponse(input) {
+  if (!input || typeof input !== "object" || Number(input.Code) !== 0) {
+    throw new Error(`Zhihu API returned an error: ${input?.Message || "unknown error"}`);
+  }
+
+  const data = input.Data;
+  if (!data || typeof data !== "object" || !Array.isArray(data.Items)) {
+    throw new Error("Zhihu API response is missing Data.Items");
+  }
+
+  const articles = normalizeZhihuArticles(
+    data.Items
+      .filter((item) => !item.ContentType || item.ContentType === "article")
+      .map(normalizeOfficialItem)
+  );
+  const paging = data.Paging && typeof data.Paging === "object" ? data.Paging : {};
+
+  return {
+    articles,
+    isEnd: Boolean(paging.IsEnd),
+    nextOffset: paging.NextOffset == null ? null : String(paging.NextOffset),
+  };
+}
+
 export function mergeArticleSummaries(local, zhihu) {
   return newestFirst(deduplicate([...local, ...zhihu]));
 }
-

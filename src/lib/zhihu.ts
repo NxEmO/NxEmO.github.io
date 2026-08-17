@@ -7,4 +7,4 @@ export type ArticleSummary = {
   slug?: string;
   externalUrl?: string;
 };
-export { normalizeZhihuArticles, mergeArticleSummaries } from "./zhihu.mjs";
+export { normalizeZhihuArticles, normalizeZhihuApiResponse, mergeArticleSummaries } from "./zhihu.mjs";

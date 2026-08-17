@@ -10,8 +10,8 @@ test("Zhihu sync workflow runs on a schedule with repository write access", () =
   assert.match(workflow, /cron:\s*["']17 3 \* \* \*["']/);
   assert.match(workflow, /workflow_dispatch:/);
   assert.match(workflow, /contents:\s*write/);
-  assert.match(workflow, /ZHIHU_ARTICLES_URL/);
   assert.match(workflow, /ZHIHU_API_TOKEN/);
+  assert.doesNotMatch(workflow, /ZHIHU_ARTICLES_URL/);
   assert.match(workflow, /npm run sync:zhihu/);
 });
 
@@ -21,4 +21,3 @@ test("deployment workflow has no stale Zhihu scraper trigger", () => {
   assert.doesNotMatch(workflow, /Scrape Zhihu Articles/);
   assert.match(workflow, /branches:\s*\[main\]/);
 });
-

@@ -31,7 +31,6 @@ jobs:
       - name: Sync Zhihu metadata
         run: npm run sync:zhihu
         env:
-          ZHIHU_ARTICLES_URL: ${{ secrets.ZHIHU_ARTICLES_URL }}
           ZHIHU_API_TOKEN: ${{ secrets.ZHIHU_API_TOKEN }}
 
       - name: Commit snapshot when changed
@@ -46,4 +45,3 @@ jobs:
           git add data/zhihu.json
           git commit -m "chore: sync Zhihu article index"
           git push
-
