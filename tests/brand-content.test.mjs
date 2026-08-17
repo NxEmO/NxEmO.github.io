@@ -24,7 +24,8 @@ const source = sourceFiles.map(({ path, text }) => `\n--- ${path}\n${text}`).joi
 const readme = readFileSync(join(repoRoot, "README.md"), "utf8");
 
 test("uses NxEmO as the person and Whither Studio as the studio", () => {
-  assert.match(source, /NxEmO — Graphics Programmer \| Whither Studio/);
+  assert.match(source, /NxEmO \| Whither Studio/);
+  assert.doesNotMatch(source, /Graphics Programmer/);
   assert.match(source, /const NAMES = \["NxEmO", "Whither Studio"\]/);
   assert.match(source, /NxEmO · \{new Date\(\)\.getFullYear\(\)\}/);
   assert.match(source, /Whither Studio/);
@@ -72,6 +73,8 @@ test("offers a reduced-motion mode", () => {
 test("README accurately attributes the design without claiming article sync", () => {
   assert.match(readme, /NxEmO/);
   assert.match(readme, /Whither Studio/);
+  assert.match(readme, /个人文章索引/);
+  assert.doesNotMatch(readme, /Graphics Programmer/);
   assert.match(readme, /Land1ngW/);
   assert.match(readme, /Next\.js 16/);
   assert.equal(readme.includes("每日同步知乎文章"), false);
