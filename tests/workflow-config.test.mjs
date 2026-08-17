@@ -19,5 +19,8 @@ test("deployment workflow has no stale Zhihu scraper trigger", () => {
   const workflow = read(".github/workflows/deploy.yml");
 
   assert.doesNotMatch(workflow, /Scrape Zhihu Articles/);
+  assert.match(workflow, /workflows:\s*\["Sync Zhihu article index"\]/);
+  assert.match(workflow, /types:\s*\[completed\]/);
+  assert.match(workflow, /github\.event\.workflow_run\.conclusion/);
   assert.match(workflow, /branches:\s*\[main\]/);
 });
