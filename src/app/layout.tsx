@@ -23,7 +23,6 @@ export default function RootLayout({
       <body>
         <WaterBackground />
         <a className="skip-link" href="#main-content">跳转到内容</a>
-        <div className="rain-layer" aria-hidden="true">{Array.from({ length: 24 }, (_, index) => <i key={index} style={{ left: `${(index * 43) % 100}%`, animationDelay: `${-(index % 9) * 0.47}s`, animationDuration: `${1.4 + (index % 5) * 0.3}s` }} />)}</div>
         <SiteHeader />
         {children}
       </body>
