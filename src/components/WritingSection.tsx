@@ -11,9 +11,12 @@ export default function WritingSection({ articles, compact = false }: WritingSec
 
   return (
     <section id="writing" className="section writing-section">
-      <p className="section-label">Writing</p>
+      <div className="section-heading">
+        <div><p className="section-eyebrow">THE NOTEBOOK</p><h2>{compact ? "最近文章" : "文章与笔记"}<span className="section-count">{articles.length}</span></h2></div>
+        {compact ? <a href="/writing/" className="view-all-btn">全部文章 <span aria-hidden="true">↗</span></a> : <span className="writing-subtitle">记录思考，也记录实践。</span>}
+      </div>
       {visibleArticles.length === 0 ? (
-        <p className="writing-empty">No writing yet. New notes will appear here after the next sync.</p>
+        <div className="writing-empty glass-panel"><p>笔记正在酝酿中。</p><p lang="en">No writing yet. New notes will appear here after the next sync.</p></div>
       ) : (
         <div className="article-list">
           {visibleArticles.map((article) => (
@@ -23,7 +26,7 @@ export default function WritingSection({ articles, compact = false }: WritingSec
       )}
       {compact && articles.length > visibleArticles.length && (
         <a className="view-all-btn writing-view-all" href="/writing/">
-          View all writing →
+          查看全部文章 →
         </a>
       )}
     </section>

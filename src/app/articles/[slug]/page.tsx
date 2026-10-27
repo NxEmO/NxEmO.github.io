@@ -36,7 +36,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const article = await getLocalArticle(slug);
   if (!article && slug === EMPTY_ARTICLE_SLUG) {
     return (
-      <main className="article-page">
+      <main id="main-content" className="article-page">
         <div className="article-page-inner">
           <a className="article-back-link" href="/writing/">
             ← Writing
@@ -53,7 +53,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   if (!article) notFound();
 
   return (
-    <main className="article-page">
+    <main id="main-content" className="article-page">
       <div className="article-page-inner">
         <a className="article-back-link" href="/writing/">
           ← Writing

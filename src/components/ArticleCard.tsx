@@ -11,8 +11,8 @@ export default function ArticleCard({ article }: { article: ArticleSummary }) {
   return (
     <article className="article-card">
       <div className="article-card-meta">
-        <span>{formatDate(article.publishedAt)}</span>
         <span className="article-source">{isZhihu ? "Zhihu" : "NxEmO"}</span>
+        <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
       </div>
       <h2 className="article-card-title">
         <a
@@ -32,7 +32,7 @@ export default function ArticleCard({ article }: { article: ArticleSummary }) {
           ? { target: "_blank", rel: "noopener noreferrer" }
           : {})}
       >
-        {isZhihu ? "Read on Zhihu ↗" : "Read article →"}
+        {isZhihu ? "在知乎阅读全文 ↗" : "阅读全文 →"}
       </a>
     </article>
   );
