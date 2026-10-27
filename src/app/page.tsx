@@ -1,6 +1,4 @@
 import Sidebar from "@/components/Sidebar";
-import MobileTopbar from "@/components/MobileTopbar";
-import MouseSpotlight from "@/components/MouseSpotlight";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import WritingSection from "@/components/WritingSection";
@@ -11,12 +9,10 @@ export default async function Home() {
 
   return (
     <div className="shell">
-      <MouseSpotlight />
-      <Sidebar />
-      <MobileTopbar />
-      <main className="main-content">
+      <Sidebar articleCount={articles.length} />
+      <main id="main-content" className="main-content">
         <div className="main-inner">
-          <Hero />
+          <Hero articleCount={articles.length} />
           <WritingSection articles={articles} compact />
           <Footer />
         </div>

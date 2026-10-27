@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
-import MobileTopbar from "@/components/MobileTopbar";
-import MouseSpotlight from "@/components/MouseSpotlight";
 import Sidebar from "@/components/Sidebar";
 import WritingSection from "@/components/WritingSection";
 import { getWritingSummaries } from "@/lib/articles";
@@ -16,10 +14,8 @@ export default async function WritingPage() {
 
   return (
     <div className="shell">
-      <MouseSpotlight />
-      <Sidebar />
-      <MobileTopbar />
-      <main className="main-content">
+      <Sidebar articleCount={articles.length} />
+      <main id="main-content" className="main-content">
         <div className="main-inner">
           <WritingSection articles={articles} />
           <Footer />
