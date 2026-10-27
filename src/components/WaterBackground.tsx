@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { createWaterRenderer, RipplePool, WaterClock } from "@/lib/water-renderer";
+import { createWaterRenderer, RipplePool, WaterClock, surfaceEffects } from "@/lib/water-renderer";
 
 export default function WaterBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -26,8 +26,9 @@ export default function WaterBackground() {
     let width = 1;
     let height = 1;
 
+    const effects = () => surfaceEffects(document.documentElement.dataset);
     const enabled = () => !disposed && !lost && !failed && !document.hidden &&
-      !reducedMotion.matches && document.documentElement.dataset.water !== "off";
+      !reducedMotion.matches && (effects().water || effects().rain);
 
     const resize = () => {
       width = Math.max(1, window.innerWidth);
@@ -53,12 +54,13 @@ export default function WaterBackground() {
         frame = requestAnimationFrame(tick);
         return;
       }
-      if (simulationTime >= nextDrop) {
-        const rain = document.documentElement.dataset.rain === "on";
+      const activeEffects = effects();
+      if (activeEffects.water && simulationTime >= nextDrop) {
+        const rain = activeEffects.rain;
         ripples.add(width * (0.08 + Math.random() * 0.84), height * (0.12 + Math.random() * 0.62), simulationTime, rain ? 0.9 : 0.65);
         nextDrop = simulationTime + (rain ? 0.55 : 3.2);
       }
-      renderer.render(simulationTime, ripples.values);
+      renderer.render(simulationTime, ripples.values, activeEffects);
       canvas.dataset.ready = "true";
       frame = requestAnimationFrame(tick);
     };
@@ -76,7 +78,7 @@ export default function WaterBackground() {
     };
 
     const pointerMove = (event: PointerEvent) => {
-      if (!enabled() || !renderer || event.pointerType === "touch") return;
+      if (!enabled() || !effects().water || !renderer || event.pointerType === "touch") return;
       if (clock.time - lastMove < 0.12 || Math.hypot(event.clientX - lastX, event.clientY - lastY) < 20) return;
       ripples.add(event.clientX, event.clientY, clock.time, 0.5);
       lastMove = clock.time;
@@ -85,7 +87,7 @@ export default function WaterBackground() {
     };
 
     const pointerDown = (event: PointerEvent) => {
-      if (enabled() && renderer) ripples.add(event.clientX, event.clientY, clock.time, 1.6);
+      if (enabled() && effects().water && renderer) ripples.add(event.clientX, event.clientY, clock.time, 1.6);
     };
 
     const contextLost = (event: Event) => {

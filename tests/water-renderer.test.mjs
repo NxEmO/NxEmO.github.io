@@ -1,6 +1,40 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { coverScale, createWaterRenderer, MAX_RIPPLES, RipplePool, WaterClock } from "../src/lib/water-renderer.ts";
+import { coverScale, createWaterRenderer, MAX_RIPPLES, RipplePool, WaterClock, surfaceEffects } from "../src/lib/water-renderer.ts";
+
+test("rain and water retain independent preferences", () => {
+  assert.deepEqual(surfaceEffects({}), { water: true, rain: false });
+  assert.deepEqual(surfaceEffects({ water: "off", rain: "on" }), { water: false, rain: true });
+  assert.deepEqual(surfaceEffects({ water: "on", rain: "on" }), { water: true, rain: true });
+  assert.deepEqual(surfaceEffects({ water: "off", rain: "off" }), { water: false, rain: false });
+});
+
+test("renderer sends rain-only, water-only, combined, and disabled modes separately to the GPU", () => {
+  const uniforms = [];
+  let draws = 0;
+  const gl = new Proxy({
+    NO_ERROR: 0,
+    createProgram: () => ({}), createShader: () => ({}),
+    createBuffer: () => ({}), createTexture: () => ({}),
+    getShaderPrecisionFormat: () => ({ precision: 23 }),
+    getShaderParameter: () => true, getProgramParameter: () => true,
+    getAttribLocation: () => 0, getUniformLocation: (_, name) => name,
+    getError: () => 0,
+    uniform2f: (location, x, y) => uniforms.push([location, x, y]),
+    drawArrays: () => { draws += 1; },
+  }, { get: (target, key) => key in target ? target[key] : () => {} });
+  const renderer = createWaterRenderer({ getContext: () => gl }, { naturalWidth: 2150, naturalHeight: 1250 });
+  assert.ok(renderer);
+  renderer.resize(390, 844, 1);
+  for (const [water, rain] of [[false, true], [true, false], [true, true], [false, false]]) {
+    renderer.render(1, new RipplePool().values, { water, rain });
+  }
+  assert.deepEqual(uniforms.filter(([name]) => name === "uEffects"), [
+    ["uEffects", 0, 1], ["uEffects", 1, 0], ["uEffects", 1, 1], ["uEffects", 0, 0],
+  ]);
+  assert.equal(draws, 4);
+  renderer.dispose();
+});
 
 test("water starts on the first frame on both touch and desktop displays", () => {
   for (const fps of [30, 60]) {
