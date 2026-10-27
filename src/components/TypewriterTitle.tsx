@@ -19,13 +19,14 @@ function getReducedMotionSnapshot() {
   return window.matchMedia(REDUCED_MOTION_QUERY).matches;
 }
 
-export default function TypewriterTitle() {
+export default function TypewriterTitle({ lines }: { lines?: readonly string[] }) {
+  const title = lines?.join(" ");
   const reducedMotion = useSyncExternalStore(
     subscribeToReducedMotion,
     getReducedMotionSnapshot,
     () => false
   );
-  const [displayed, setDisplayed] = useState(NAMES[0]);
+  const [displayed, setDisplayed] = useState(title ?? NAMES[0]);
   const [nameIdx, setNameIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [cursorOn, setCursorOn] = useState(true);
@@ -66,7 +67,7 @@ export default function TypewriterTitle() {
 
   useEffect(() => {
     if (reducedMotion) return;
-    const target = NAMES[nameIdx];
+    const target = title ?? NAMES[nameIdx];
 
     if (!isDeleting && displayed === target) {
       const timer = setTimeout(() => setIsDeleting(true), PAUSE_MS);
@@ -88,9 +89,31 @@ export default function TypewriterTitle() {
       );
     }, speed);
     return () => clearTimeout(timer);
-  }, [displayed, isDeleting, nameIdx, reducedMotion]);
+  }, [displayed, isDeleting, nameIdx, reducedMotion, title]);
 
-  const renderText = reducedMotion ? NAMES[0] : glitching ? glitchText : displayed;
+  const renderText = reducedMotion ? (title ?? NAMES[0]) : glitching ? glitchText : displayed;
+
+  if (lines) {
+    return (
+      <h1 id="home-title" aria-label={title}>
+        {lines.map((line, index) => {
+          const start = lines.slice(0, index).reduce((length, previous) => length + previous.length + 1, 0);
+          const cursorHere = renderText.length >= start &&
+            (index === lines.length - 1 || renderText.length <= start + line.length);
+          return (
+            <span className="typewriter-line" aria-hidden="true" key={index}>
+              <span className={index > 0 ? "typewriter-accent" : undefined}>
+                {renderText.slice(start, start + line.length)}
+              </span>
+              {cursorHere && !reducedMotion && (
+                <i className="typewriter-cursor" style={{ opacity: cursorOn ? 1 : 0 }} />
+              )}
+            </span>
+          );
+        })}
+      </h1>
+    );
+  }
 
   return (
     <h1
