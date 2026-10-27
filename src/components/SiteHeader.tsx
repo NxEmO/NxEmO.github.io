@@ -14,7 +14,7 @@ function subscribe(callback: () => void) {
   return () => window.removeEventListener("appearance-change", callback);
 }
 
-function setPreference(key: "theme" | "glass" | "rain", value: string) {
+function setPreference(key: "theme" | "glass" | "rain" | "water", value: string) {
   document.documentElement.dataset[key] = value;
   try { localStorage.setItem(`nxemo-${key}`, value); } catch { /* Controls also work without browser storage. */ }
   window.dispatchEvent(new Event("appearance-change"));
@@ -26,6 +26,7 @@ export default function SiteHeader() {
   const theme = useSyncExternalStore(subscribe, () => (document.documentElement.dataset.theme ?? "auto") as Theme, () => "auto" as Theme);
   const frosted = useSyncExternalStore(subscribe, () => document.documentElement.dataset.glass !== "clear", () => true);
   const rainy = useSyncExternalStore(subscribe, () => document.documentElement.dataset.rain === "on", () => false);
+  const water = useSyncExternalStore(subscribe, () => document.documentElement.dataset.water !== "off", () => true);
 
   return (
     <header className="site-header glass-panel">
@@ -36,6 +37,7 @@ export default function SiteHeader() {
         <a href={`mailto:${profile.email}`} className="nav-link nav-contact"><Icon name="mail" /> 联系</a>
       </nav>
       <div className="appearance-controls" aria-label="外观设置">
+        <button type="button" className="appearance-button" aria-pressed={water} onClick={() => setPreference("water", water ? "off" : "on")} title={water ? "关闭背景水波" : "开启背景水波"} aria-label="背景水波"><Icon name="water" /><span>水波</span></button>
         <button type="button" className="appearance-button" onClick={() => setPreference("theme", nextTheme[theme])} title={`主题：${themeLabels[theme]}，点击切换为${themeLabels[nextTheme[theme]]}`} aria-label={`主题：${themeLabels[theme]}，切换为${themeLabels[nextTheme[theme]]}`}><Icon name={theme === "light" ? "sun" : theme === "dark" ? "moon" : "auto"} /><span>{themeLabels[theme]}</span></button>
         <button type="button" className="appearance-button" aria-pressed={frosted} onClick={() => setPreference("glass", frosted ? "clear" : "frosted")} title={frosted ? "关闭磨砂效果" : "开启磨砂效果"} aria-label="磨砂效果"><Icon name="glass" /><span>磨砂</span></button>
         <button type="button" className="appearance-button" aria-pressed={rainy} onClick={() => setPreference("rain", rainy ? "off" : "on")} title={rainy ? "关闭雨滴效果" : "开启雨滴效果"} aria-label="雨滴效果"><Icon name="rain" /><span>雨滴</span></button>
