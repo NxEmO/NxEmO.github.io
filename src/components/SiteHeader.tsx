@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSyncExternalStore } from "react";
 import { profile } from "@/lib/resume";
@@ -30,10 +29,10 @@ export default function SiteHeader() {
 
   return (
     <header className="site-header glass-panel">
-      <Link href="/" className="header-brand" aria-label={`${profile.name} 首页`}><span className="brand-mark">N<span>·</span></span><span>{profile.name}</span></Link>
+      <a href="/" className="header-brand" aria-label={`${profile.name} 首页`}><span className="brand-mark">N<span>·</span></span><span>{profile.name}</span></a>
       <nav className="header-nav" aria-label="主导航">
-        <Link href="/" className={!writingActive && pathname === "/" ? "nav-link active" : "nav-link"} aria-current={pathname === "/" ? "page" : undefined}><Icon name="home" /> 首页</Link>
-        <Link href="/writing/" className={writingActive ? "nav-link active" : "nav-link"} aria-current={writingActive ? "page" : undefined}><Icon name="book" /> 文章</Link>
+        <a href="/" className={!writingActive && pathname === "/" ? "nav-link active" : "nav-link"} aria-current={pathname === "/" ? "page" : undefined}><Icon name="home" /> 首页</a>
+        <a href="/writing/" className={writingActive ? "nav-link active" : "nav-link"} aria-current={writingActive ? "page" : undefined}><Icon name="book" /> 文章</a>
         <a href={`mailto:${profile.email}`} className="nav-link nav-contact"><Icon name="mail" /> 联系</a>
       </nav>
       <div className="appearance-controls" aria-label="外观设置">
