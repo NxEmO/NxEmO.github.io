@@ -17,6 +17,8 @@ export default function WaterBackground() {
     let renderer: ReturnType<typeof createWaterRenderer> = null;
     let frame = 0;
     let nextDrop = 1.8;
+    let nextGust = 4;
+    let background = [0.95, 0.94, 0.96];
     let lastMove = 0;
     let lastX = -1000;
     let lastY = -1000;
@@ -58,14 +60,24 @@ export default function WaterBackground() {
       if (activeEffects.water && simulationTime >= nextDrop) {
         const rain = activeEffects.rain;
         ripples.add(width * (0.08 + Math.random() * 0.84), height * (0.12 + Math.random() * 0.62), simulationTime, rain ? 0.9 : 0.65);
-        nextDrop = simulationTime + (rain ? 0.55 : 3.2);
+        nextDrop = simulationTime + (rain ? 0.8 : coarsePointer.matches ? 5.2 : 2);
       }
-      renderer.render(simulationTime, ripples.values, activeEffects);
+      if (activeEffects.water && simulationTime >= nextGust) {
+        const x = width * Math.random();
+        const y = height * Math.random();
+        for (let i = 0; i < 3; i++) {
+          ripples.add(x + (Math.random() - .5) * 100, y + (Math.random() - .5) * 100, simulationTime, .25);
+        }
+        nextGust = simulationTime + 4 + Math.random() * 5;
+      }
+      renderer.render(simulationTime, ripples.values, activeEffects, background);
       canvas.dataset.ready = "true";
       frame = requestAnimationFrame(tick);
     };
 
     const sync = () => {
+      const rgb = getComputedStyle(document.body).backgroundColor.match(/[\d.]+/g);
+      if (rgb && rgb.length >= 3) background = rgb.slice(0, 3).map((value) => Number(value) / 255);
       if (!enabled()) { stop(); return; }
       if (!image.complete || !image.naturalWidth) return;
       if (!renderer) {

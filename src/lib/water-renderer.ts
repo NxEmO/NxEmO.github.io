@@ -1,4 +1,6 @@
-// A small WebGL 1 surface: refract the existing wallpaper instead of drawing rings over it.
+import { WaveField } from "./wave-field.ts";
+
+// A WebGL 1 surface driven by a damped two-dimensional wave field.
 // No external assets or rendering dependencies are required.
 // Leave room for surface controls within WebGL 1's minimum uniform budget.
 export const MAX_RIPPLES = 10;
@@ -63,7 +65,10 @@ uniform vec2 uResolution;
 uniform vec2 uCover;
 uniform float uTime;
 uniform vec2 uEffects;
-uniform vec4 uRipples[${MAX_RIPPLES}];
+uniform sampler2D uWave;
+uniform vec2 uFieldSize;
+uniform float uCellSize;
+uniform vec3 uPageColor;
 
 float hash21(vec2 p) {
   vec3 q = fract(vec3(p.xyx) * 0.1031);
@@ -109,28 +114,30 @@ vec4 restingDrops(vec2 pixel, float time) {
   return vec4(normal * 5.0, mask, (-normal.x - normal.y) * 0.12);
 }
 
+float heightAt(vec2 p) {
+  vec2 uv = (p / uCellSize + 0.5) / uFieldSize;
+  vec2 channels = texture2D(uWave, clamp(uv, 0.0, 1.0)).rg;
+  return (dot(channels, vec2(65280.0, 255.0)) / 65535.0 - 0.5) * 8.0;
+}
+
+vec2 slopeAt(vec2 p) {
+  return vec2(heightAt(p + vec2(uCellSize, 0.0)) - heightAt(p - vec2(uCellSize, 0.0)),
+              heightAt(p + vec2(0.0, uCellSize)) - heightAt(p - vec2(0.0, uCellSize)));
+}
+
+vec2 bendAt(vec2 p) {
+  vec2 slope = slopeAt(p);
+  float energy = clamp(length(slope) * 7.0 + abs(heightAt(p)) * 1.8, 0.0, 1.0);
+  return clamp(slope * vec2(38.0, 28.0) * energy, -18.0, 18.0);
+}
+
 void main() {
   vec2 pixel = vUv * uResolution;
-  // Two broad, slow currents keep the water alive between pointer interactions.
-  float a = dot(pixel, vec2(0.023, 0.009)) + uTime * 0.85;
-  float b = dot(pixel, vec2(-0.012, 0.031)) - uTime * 0.63;
-  vec2 displacement = vec2(cos(a) * 2.4 + sin(b) * 1.6,
-                           sin(a) * 1.4 + cos(b) * 2.2) * uEffects.x;
-  float rippleLight = 0.0;
-  for (int i = 0; i < ${MAX_RIPPLES}; i++) {
-    float age = uTime - uRipples[i].z;
-    if (uEffects.x > 0.5 && age >= 0.0 && age < ${RIPPLE_LIFETIME.toFixed(1)} && uRipples[i].w > 0.0) {
-      vec2 delta = pixel - uRipples[i].xy;
-      float distanceToCenter = length(delta);
-      float front = distanceToCenter - age * 115.0;
-      float band = front / 26.0;
-      float envelope = exp(-band * band);
-      float fade = smoothstep(0.0, 0.12, age) * pow(1.0 - age / ${RIPPLE_LIFETIME.toFixed(1)}, 1.5);
-      float wave = sin(front * 0.19) * envelope * fade * uRipples[i].w;
-      displacement += delta / max(distanceToCenter, 1.0) * wave * 12.0;
-      rippleLight += wave;
-    }
-  }
+  // Broad square cells refract together; the lower area transitions to smooth waves.
+  float spacing = clamp(uResolution.y / 22.5, 32.0, 80.0);
+  vec2 center = (floor(pixel / spacing) + 0.5) * spacing;
+  float gridFade = 1.0 - smoothstep(0.5, 0.75, vUv.y);
+  vec2 displacement = -mix(bendAt(pixel), bendAt(center), gridFade) * uEffects.x;
 
   vec2 waterDisplacement = displacement;
   vec4 drops = vec4(0.0);
@@ -154,12 +161,29 @@ void main() {
     color += drops.w;
   }
 
-  // Small refracted points catch wave crests, like light on a water surface.
-  vec2 cell = mod(pixel + displacement * 1.6, 25.0) - 12.5;
-  float point = 1.0 - smoothstep(0.55, 1.5, length(cell));
-  float glint = point * (0.018 + min(abs(rippleLight), 1.0) * 0.24) * uEffects.x;
-  float sheen = clamp(dot(waterDisplacement, vec2(-0.003, 0.005)), -0.035, 0.055);
-  color += sheen + vec3(0.89, 0.93, 1.0) * glint;
+  if (uEffects.x > 0.5) {
+    vec2 edge = min(mod(pixel, spacing), spacing - mod(pixel, spacing));
+    float grid = (1.0 - smoothstep(1.2, 2.1, min(edge.x, edge.y))) * gridFade;
+    color = mix(color, uPageColor, grid * (0.16 + length(waterDisplacement) * 0.003));
+
+    // Sampled square highlights follow the actual crests and troughs, not decorative rings.
+    vec2 pointCenter = (floor(pixel / 10.0) + 0.5) * 10.0;
+    float crest = heightAt(pointCenter);
+    vec2 offset = slopeAt(pointCenter) * 1.5;
+    vec2 pointDelta = abs(pixel - pointCenter - offset);
+    float dotMask = 1.0 - smoothstep(0.8, 1.6, max(pointDelta.x, pointDelta.y));
+    float glow = clamp(abs(crest) * 2.8 + length(slopeAt(pointCenter)) * 2.0, 0.0, 0.8);
+    vec3 crestColor = crest > 0.0 ? vec3(0.84, 0.91, 1.0) : uPageColor * 0.45;
+    color = mix(color, crestColor, dotMask * glow);
+
+    // Sparse drifting stars replace the former regular all-over dot pattern.
+    vec2 stars = pixel + vec2(uTime * 0.7, uTime * 0.3) + waterDisplacement * 0.6;
+    vec2 cell = floor(stars / 85.0);
+    float seed = hash21(cell);
+    vec2 star = (vec2(seed, hash21(cell + 13.0)) * 0.8 + 0.1) * 85.0;
+    float starMask = 1.0 - smoothstep(0.5, 1.7, length(mod(stars, 85.0) - star));
+    color = mix(color, vec3(0.88, 0.93, 1.0), starMask * (0.4 + 0.2 * sin(uTime + seed * 20.0)));
+  }
   gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }`;
 
@@ -174,8 +198,13 @@ export function createWaterRenderer(canvas: HTMLCanvasElement, image: HTMLImageE
   let program: WebGLProgram | null = null;
   let buffer: WebGLBuffer | null = null;
   let texture: WebGLTexture | null = null;
+  let waveTexture: WebGLTexture | null = null;
+  let field = new WaveField(1, 1);
+  let lastTime: number | null = null;
+  const seen = new Float64Array(MAX_RIPPLES).fill(-Infinity);
   const dispose = () => {
     if (texture) gl.deleteTexture(texture);
+    if (waveTexture) gl.deleteTexture(waveTexture);
     if (buffer) gl.deleteBuffer(buffer);
     if (program) gl.deleteProgram(program);
     shaders.forEach((shader) => gl.deleteShader(shader));
@@ -221,8 +250,19 @@ export function createWaterRenderer(canvas: HTMLCanvasElement, image: HTMLImageE
     const resolution = gl.getUniformLocation(program, "uResolution");
     const cover = gl.getUniformLocation(program, "uCover");
     const time = gl.getUniformLocation(program, "uTime");
-    const ripples = gl.getUniformLocation(program, "uRipples[0]");
     const effects = gl.getUniformLocation(program, "uEffects");
+    const fieldSize = gl.getUniformLocation(program, "uFieldSize");
+    const cellSize = gl.getUniformLocation(program, "uCellSize");
+    const pageColor = gl.getUniformLocation(program, "uPageColor");
+    waveTexture = gl.createTexture();
+    if (!waveTexture) throw new Error("Wave texture is unavailable");
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, waveTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.uniform1i(gl.getUniformLocation(program, "uWave"), 1);
 
     return {
       resize(width: number, height: number, pixelRatio: number) {
@@ -231,10 +271,26 @@ export function createWaterRenderer(canvas: HTMLCanvasElement, image: HTMLImageE
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.uniform2f(resolution, width, height);
         gl.uniform2fv(cover, coverScale(width, height, image.naturalWidth, image.naturalHeight));
+        field = new WaveField(width, height);
+        lastTime = null;
+        seen.fill(-Infinity);
+        gl.uniform2f(fieldSize, field.columns, field.rows);
+        gl.uniform1f(cellSize, field.cellSize);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, field.columns, field.rows, 0, gl.RGBA, gl.UNSIGNED_BYTE, field.pixels);
       },
-      render(seconds: number, values: Float32Array, enabled: { water: boolean; rain: boolean }) {
+      render(seconds: number, values: Float32Array, enabled: { water: boolean; rain: boolean }, background = [0.95, 0.94, 0.96]) {
+        for (let i = 0; i < MAX_RIPPLES; i++) {
+          const offset = i * 4;
+          if (values[offset + 3] > 0 && values[offset + 2] !== seen[i]) {
+            if (enabled.water) field.disturb(values[offset], values[offset + 1], values[offset + 3], values[offset + 3] > 1 ? 8 : 12);
+            seen[i] = values[offset + 2];
+          }
+        }
+        field.step(lastTime === null ? 1 / 60 : seconds - lastTime);
+        lastTime = seconds;
+        gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, field.columns, field.rows, gl.RGBA, gl.UNSIGNED_BYTE, field.pixels);
         gl.uniform1f(time, seconds);
-        gl.uniform4fv(ripples, values);
+        gl.uniform3fv(pageColor, background);
         gl.uniform2f(effects, enabled.water ? 1 : 0, enabled.rain ? 1 : 0);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
       },
