@@ -146,7 +146,9 @@ button, a { touch-action: manipulation; }
 .status-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; }
 .hero-eyebrow { color: var(--text-3); font-family: var(--mono); font-size: 9px; letter-spacing: 2px; margin-bottom: 12px; }
 .hero h1 { font-size: clamp(43px, 5.1vw, 65px); font-weight: 760; line-height: 1.05; letter-spacing: -3px; position: relative; }
-.hero h1 span { background: linear-gradient(110deg, var(--accent), var(--purple) 90%); color: transparent; background-clip: text; }
+.hero h1 .typewriter-accent { background: linear-gradient(110deg, var(--accent), var(--purple) 90%); color: transparent; background-clip: text; }
+.typewriter-line { display: block; min-height: 1.05em; white-space: pre; }
+.typewriter-cursor { display: inline-block; width: 3px; height: .85em; margin-left: 3px; vertical-align: middle; background: var(--accent); border-radius: 1px; box-shadow: 0 0 8px var(--accent); transition: opacity .08s; }
 .hero-description { color: var(--text-2); font-size: 13px; line-height: 1.95; margin-top: 20px; position: relative; }
 .hero-actions { display: flex; align-items: center; gap: 12px; margin: 23px 0 29px; position: relative; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 9px 17px; border-radius: 9px; font-size: 12px; transition: transform .2s, box-shadow .2s; }

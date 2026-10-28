@@ -1,12 +1,13 @@
 import { profile } from "@/lib/resume";
 import Icon from "./Icon";
+import TypewriterTitle from "./TypewriterTitle";
 
 export default function Hero({ articleCount = 0 }: { articleCount?: number }) {
   return (
     <section id="home" className="hero glass-panel" aria-labelledby="home-title">
       <div className="hero-kicker"><span className="status-dot" /> {profile.studio}</div>
       <p className="hero-eyebrow">GAME DEVELOPMENT & PERSONAL NOTES</p>
-      <h1 id="home-title">Build, play<br /><span>& explore.</span></h1>
+      <TypewriterTitle lines={["Build, play", "& explore."]} />
       <p className="hero-description">我是 {profile.name}，一名游戏开发者。<br />在这里记录学习、开发，以及从想法到实现的过程。</p>
       <div className="hero-actions">
         <a href="#writing" className="button button-primary"><Icon name="book" /> 浏览文章 <span aria-hidden="true">↓</span></a>
