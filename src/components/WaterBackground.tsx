@@ -36,7 +36,7 @@ export default function WaterBackground() {
       width = Math.max(1, window.innerWidth);
       height = Math.max(1, window.innerHeight);
       // Bound fill-rate on high-DPI displays and keep mobile rendering inexpensive.
-      const ratio = Math.min(window.devicePixelRatio || 1, coarsePointer.matches ? 1 : 1.5, Math.sqrt(2_400_000 / (width * height)));
+      const ratio = Math.min(window.devicePixelRatio || 1, 1, Math.sqrt(1_000_000 / (width * height)));
       renderer?.resize(width, height, ratio);
       ripples.clear();
     };
