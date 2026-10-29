@@ -13,6 +13,7 @@ export default function StarField() {
     let width = 1, height = 1, frame = 0, last = 0;
     let mouse = { x: -1000, y: -1000 };
     let links: [number, number][] = [];
+    let visibility: number[] = [];
     let stars: { x: number; y: number; radius: number; phase: number }[] = [];
     const resize = () => {
       width = innerWidth; height = innerHeight;
@@ -23,6 +24,7 @@ export default function StarField() {
         x: Math.random() * width, y: Math.random() * height, radius: 1.1 + Math.random() * 1.3, phase: Math.random() * 6.28,
       }));
       links = buildConstellations(stars);
+      visibility = links.map(() => 0);
     };
     const draw = (now: number) => {
       frame = 0;
@@ -41,19 +43,26 @@ export default function StarField() {
         ctx.beginPath(); ctx.arc(x, y, star.radius, 0, Math.PI * 2); ctx.fill();
         active.push({ x, y, distance });
       }
-      const nearby = active;
-      for (const [i, j] of links) {
-        const a = nearby[i];
-        const b = nearby[j];
+      ctx.shadowBlur = 0;
+      ctx.lineCap = "round";
+      for (let index = 0; index < links.length; index++) {
+        const [i, j] = links[index];
+        const a = active[i];
+        const b = active[j];
         const distance = Math.hypot(a.x - b.x, a.y - b.y);
-          const proximity = Math.max(0, 1 - Math.min(a.distance, b.distance) / 320);
-          ctx.shadowBlur = 0;
-          ctx.strokeStyle = `rgba(55,70,110,${proximity * .25})`;
-          ctx.lineWidth = 2.5;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-          ctx.strokeStyle = `rgba(255,255,255,${(.10 + proximity * .75) * (1 - distance / 240)})`;
-          ctx.lineWidth = .8 + proximity * .5;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        const proximity = Math.max(0, 1 - Math.min(a.distance, b.distance) / 340);
+        const smooth = proximity * proximity * (3 - 2 * proximity);
+        // Ease in and linger after the pointer leaves, with a slow, staggered shimmer.
+        visibility[index] += (smooth - visibility[index]) * (1 - Math.exp(-dt / .65));
+        const shimmer = .5 + .5 * Math.sin(now * .00065 + stars[i].phase);
+        const alpha = (.008 + shimmer * .022 + visibility[index] * .32) * (1 - distance / 260);
+        const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+        gradient.addColorStop(0, `rgba(255,255,255,${alpha * .15})`);
+        gradient.addColorStop(.5, `rgba(255,255,255,${alpha})`);
+        gradient.addColorStop(1, `rgba(255,255,255,${alpha * .15})`);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = .65;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
       frame = requestAnimationFrame(draw);
     };
