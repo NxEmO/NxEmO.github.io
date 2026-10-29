@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { buildConstellations } from "../lib/constellations";
 
 export default function StarField() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -21,17 +22,7 @@ export default function StarField() {
       stars = Array.from({ length: Math.min(180, Math.round(width * height / 6500)) }, () => ({
         x: Math.random() * width, y: Math.random() * height, radius: 1.1 + Math.random() * 1.3, phase: Math.random() * 6.28,
       }));
-      links = [];
-      const seen = new Set<string>();
-      stars.forEach((a, i) => {
-        stars.map((b, j) => ({ j, distance: Math.hypot(a.x - b.x, a.y - b.y) }))
-          .filter(({ j, distance }) => j !== i && distance < 200)
-          .sort((a, b) => a.distance - b.distance).slice(0, 3)
-          .forEach(({ j }) => {
-            const key = i < j ? `${i}:${j}` : `${j}:${i}`;
-            if (!seen.has(key)) { seen.add(key); links.push([i, j]); }
-          });
-      });
+      links = buildConstellations(stars);
     };
     const draw = (now: number) => {
       frame = 0;
@@ -41,8 +32,8 @@ export default function StarField() {
       const active: { x: number; y: number; distance: number }[] = [];
       for (const star of stars) {
         star.phase += dt * .02;
-        const x = star.x + Math.sin(now * .0001 + star.phase) * 5;
-        const y = star.y + Math.cos(now * .00015 + star.phase) * 5;
+        const x = star.x + Math.sin(now * .0001) * 5;
+        const y = star.y + Math.cos(now * .00015) * 5;
         const distance = Math.hypot(x - mouse.x, y - mouse.y);
         ctx.shadowColor = "rgba(55,70,110,.75)";
         ctx.shadowBlur = 4;
@@ -90,4 +81,3 @@ export default function StarField() {
   }, []);
   return <canvas ref={ref} className="star-field" aria-hidden="true" />;
 }
-
