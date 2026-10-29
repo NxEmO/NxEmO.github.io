@@ -13,15 +13,20 @@ export function surfaceEffects(preferences: { water?: string; rain?: string }) {
 export class WaterClock {
   time = 0;
   private lastFrame: number | null = null;
+  private lastTick: number | null = null;
 
-  pause() { this.lastFrame = null; }
+  pause() { this.lastFrame = null; this.lastTick = null; }
 
   step(now: number, fps: number) {
     const interval = 1000 / fps;
     const elapsed = this.lastFrame === null ? interval : now - this.lastFrame;
     if (elapsed < interval - 1) return null;
-    this.lastFrame = now;
-    this.time += Math.min(elapsed / 1000, 0.05);
+    const delta = this.lastTick === null ? interval : now - this.lastTick;
+    // Retain the fractional scheduling remainder on 90/144/165 Hz displays.
+    this.lastFrame = this.lastFrame === null ? now :
+      this.lastFrame + Math.max(1, Math.floor((elapsed + 1) / interval)) * interval;
+    this.lastTick = now;
+    this.time += Math.min(delta / 1000, 0.05);
     return this.time;
   }
 }

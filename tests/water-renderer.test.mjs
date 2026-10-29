@@ -1,5 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+test("144 Hz displays retain approximately 60 rendered frames per second", () => {
+  const clock = new WaterClock();
+  let frames = 0;
+  for (let i = 0; i < 1440; i++) if (clock.step(i * 1000 / 144, 60) !== null) frames++;
+  assert.ok(frames >= 590 && frames <= 610, `rendered ${frames} frames over 10 seconds`);
+  assert.ok(clock.time > 9.9 && clock.time < 10.1);
+});
 import { coverScale, createWaterRenderer, MAX_RIPPLES, RipplePool, WaterClock, surfaceEffects } from "../src/lib/water-renderer.ts";
 
 test("rain and water retain independent preferences", () => {
