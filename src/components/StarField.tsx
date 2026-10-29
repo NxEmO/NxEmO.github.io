@@ -11,6 +11,7 @@ export default function StarField() {
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let width = 1, height = 1, frame = 0, last = 0;
     let mouse = { x: -1000, y: -1000 };
+    let links: [number, number][] = [];
     let stars: { x: number; y: number; radius: number; phase: number }[] = [];
     const resize = () => {
       width = innerWidth; height = innerHeight;
@@ -18,8 +19,19 @@ export default function StarField() {
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       stars = Array.from({ length: Math.min(180, Math.round(width * height / 6500)) }, () => ({
-        x: Math.random() * width, y: Math.random() * height, radius: .6 + Math.random() * 1.1, phase: Math.random() * 6.28,
+        x: Math.random() * width, y: Math.random() * height, radius: 1.1 + Math.random() * 1.3, phase: Math.random() * 6.28,
       }));
+      links = [];
+      const seen = new Set<string>();
+      stars.forEach((a, i) => {
+        stars.map((b, j) => ({ j, distance: Math.hypot(a.x - b.x, a.y - b.y) }))
+          .filter(({ j, distance }) => j !== i && distance < 200)
+          .sort((a, b) => a.distance - b.distance).slice(0, 3)
+          .forEach(({ j }) => {
+            const key = i < j ? `${i}:${j}` : `${j}:${i}`;
+            if (!seen.has(key)) { seen.add(key); links.push([i, j]); }
+          });
+      });
     };
     const draw = (now: number) => {
       frame = 0;
@@ -28,25 +40,29 @@ export default function StarField() {
       ctx.clearRect(0, 0, width, height);
       const active: { x: number; y: number; distance: number }[] = [];
       for (const star of stars) {
-        star.x = (star.x + dt * 2) % width;
+        star.phase += dt * .02;
         const x = star.x + Math.sin(now * .0001 + star.phase) * 5;
         const y = star.y + Math.cos(now * .00015 + star.phase) * 5;
         const distance = Math.hypot(x - mouse.x, y - mouse.y);
-        ctx.fillStyle = `rgba(150,180,220,${.35 + Math.max(0, 1 - distance / 280) * .6})`;
+        ctx.shadowColor = "rgba(55,70,110,.75)";
+        ctx.shadowBlur = 4;
+        ctx.fillStyle = `rgba(255,255,255,${.72 + Math.max(0, 1 - distance / 320) * .28})`;
         ctx.beginPath(); ctx.arc(x, y, star.radius, 0, Math.PI * 2); ctx.fill();
-        if (distance < 280) active.push({ x, y, distance });
+        active.push({ x, y, distance });
       }
-      active.sort((a, b) => a.distance - b.distance);
-      const nearby = active.slice(0, 24);
-      for (let i = 0; i < nearby.length; i++) {
+      const nearby = active;
+      for (const [i, j] of links) {
         const a = nearby[i];
-        for (let j = i + 1; j < nearby.length; j++) {
-          const b = nearby[j], distance = Math.hypot(a.x - b.x, a.y - b.y);
-          if (distance > 180) continue;
-          ctx.strokeStyle = `rgba(140,170,215,${(1 - distance / 180) * (1 - a.distance / 300) * .55})`;
-          ctx.lineWidth = .7;
+        const b = nearby[j];
+        const distance = Math.hypot(a.x - b.x, a.y - b.y);
+          const proximity = Math.max(0, 1 - Math.min(a.distance, b.distance) / 320);
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = `rgba(55,70,110,${proximity * .25})`;
+          ctx.lineWidth = 2.5;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-        }
+          ctx.strokeStyle = `rgba(255,255,255,${(.10 + proximity * .75) * (1 - distance / 240)})`;
+          ctx.lineWidth = .8 + proximity * .5;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
       frame = requestAnimationFrame(draw);
     };
@@ -60,15 +76,18 @@ export default function StarField() {
     resize(); sync();
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", move, { passive: true });
+    window.addEventListener("pointerdown", move, { passive: true });
     document.addEventListener("pointerleave", leave);
     document.addEventListener("visibilitychange", sync);
     motion.addEventListener("change", sync);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize); window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerdown", move);
       document.removeEventListener("pointerleave", leave); document.removeEventListener("visibilitychange", sync);
       motion.removeEventListener("change", sync);
     };
   }, []);
   return <canvas ref={ref} className="star-field" aria-hidden="true" />;
 }
+
