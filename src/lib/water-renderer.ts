@@ -138,8 +138,12 @@ vec2 bendAt(vec2 p) {
 
 void main() {
   vec2 pixel = vUv * uResolution;
-  // Continuous refraction without square cells or a visible grid.
-  vec2 displacement = -bendAt(pixel) * uEffects.x;
+  // Broad square cells refract together; the lower area transitions to smooth waves.
+  float spacing = clamp(uResolution.y / 10.0, 64.0, 128.0);
+  vec2 center = (floor(pixel / spacing) + 0.5) * spacing;
+  float gridFade = 1.0 - smoothstep(0.5, 0.75, vUv.y);
+  vec2 displacement = -mix(bendAt(pixel), bendAt(center), gridFade) * uEffects.x;
+
   vec2 waterDisplacement = displacement;
   vec4 drops = vec4(0.0);
   if (uEffects.y > 0.5) {
@@ -163,10 +167,15 @@ void main() {
   }
 
   if (uEffects.x > 0.5) {
-    float crest = heightAt(pixel);
-    float glow = clamp(abs(crest) * 0.12 + length(slopeAt(pixel)) * 0.08, 0.0, 0.08);
+    // Sampled square highlights follow the actual crests and troughs, not decorative rings.
+    vec2 pointCenter = (floor(pixel / 10.0) + 0.5) * 10.0;
+    float crest = heightAt(pointCenter);
+    vec2 offset = slopeAt(pointCenter) * 1.5;
+    vec2 pointDelta = abs(pixel - pointCenter - offset);
+    float dotMask = 1.0 - smoothstep(0.8, 1.6, max(pointDelta.x, pointDelta.y));
+    float glow = clamp(abs(crest) * 2.8 + length(slopeAt(pointCenter)) * 2.0, 0.0, 0.8);
     vec3 crestColor = crest > 0.0 ? vec3(0.84, 0.91, 1.0) : uPageColor * 0.45;
-    color = mix(color, crestColor, glow);
+    color = mix(color, crestColor, dotMask * glow);
 
     // Sparse drifting stars replace the former regular all-over dot pattern.
     vec2 stars = pixel + vec2(uTime * 0.7, uTime * 0.3) + waterDisplacement * 0.6;

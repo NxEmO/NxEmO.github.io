@@ -43,7 +43,8 @@ export default function StarField() {
         ctx.beginPath(); ctx.arc(x, y, star.radius, 0, Math.PI * 2); ctx.fill();
         active.push({ x, y, distance });
       }
-      ctx.shadowBlur = 0;
+      ctx.shadowColor = "rgba(55,70,110,.35)";
+      ctx.shadowBlur = 2;
       ctx.lineCap = "round";
       for (let index = 0; index < links.length; index++) {
         const [i, j] = links[index];
@@ -55,13 +56,13 @@ export default function StarField() {
         // Ease in and linger after the pointer leaves, with a slow, staggered shimmer.
         visibility[index] += (smooth - visibility[index]) * (1 - Math.exp(-dt / .65));
         const shimmer = .5 + .5 * Math.sin(now * .00065 + stars[i].phase);
-        const alpha = (.008 + shimmer * .022 + visibility[index] * .32) * (1 - distance / 260);
+        const alpha = (.04 + shimmer * .045 + visibility[index] * .58) * (1 - distance / 320);
         const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-        gradient.addColorStop(0, `rgba(255,255,255,${alpha * .15})`);
+        gradient.addColorStop(0, `rgba(255,255,255,${alpha * .35})`);
         gradient.addColorStop(.5, `rgba(255,255,255,${alpha})`);
-        gradient.addColorStop(1, `rgba(255,255,255,${alpha * .15})`);
+        gradient.addColorStop(1, `rgba(255,255,255,${alpha * .35})`);
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = .65;
+        ctx.lineWidth = .9;
         ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
       frame = requestAnimationFrame(draw);
