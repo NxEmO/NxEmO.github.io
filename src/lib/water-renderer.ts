@@ -139,7 +139,7 @@ vec2 bendAt(vec2 p) {
 void main() {
   vec2 pixel = vUv * uResolution;
   // Broad square cells refract together; the lower area transitions to smooth waves.
-  float spacing = clamp(uResolution.y / 22.5, 32.0, 80.0);
+  float spacing = clamp(uResolution.y / 10.0, 64.0, 128.0);
   vec2 center = (floor(pixel / spacing) + 0.5) * spacing;
   float gridFade = 1.0 - smoothstep(0.5, 0.75, vUv.y);
   vec2 displacement = -mix(bendAt(pixel), bendAt(center), gridFade) * uEffects.x;
