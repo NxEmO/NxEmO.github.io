@@ -1,6 +1,24 @@
 type Point = { x: number; y: number };
 type Link = [number, number];
 
+export function distributeStars(width: number, height: number, random = Math.random): Point[] {
+  if (width <= 0 || height <= 0) return [];
+  const count = Math.min(145, Math.round(width * height / 8500));
+  const points: Point[] = [];
+  // Pick the least crowded of several random positions: organic spacing without rows.
+  for (let i = 0; i < count; i++) {
+    let best = { x: 0, y: 0 }, bestDistance = -1;
+    for (let candidate = 0; candidate < 24; candidate++) {
+      const point = { x: 8 + random() * Math.max(0, width - 16), y: 8 + random() * Math.max(0, height - 16) };
+      let nearest = Infinity;
+      for (const other of points) nearest = Math.min(nearest, (point.x - other.x) ** 2 + (point.y - other.y) ** 2);
+      if (nearest > bestDistance) { best = point; bestDistance = nearest; }
+    }
+    points.push(best);
+  }
+  return points;
+}
+
 export function buildConstellations(points: Point[]): Link[] {
   const links: Link[] = [];
   const neighbors: number[][] = points.map(() => []);

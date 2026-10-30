@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { buildConstellations } from "../lib/constellations";
+import { buildConstellations, distributeStars } from "../lib/constellations";
 
 export default function StarField() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -20,8 +20,8 @@ export default function StarField() {
       const ratio = Math.min(devicePixelRatio || 1, 1.5);
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      stars = Array.from({ length: Math.min(180, Math.round(width * height / 6500)) }, () => ({
-        x: Math.random() * width, y: Math.random() * height, radius: 1.1 + Math.random() * 1.3, phase: Math.random() * 6.28,
+      stars = distributeStars(width, height).map(point => ({
+        ...point, radius: 1.1 + Math.random() * 1.3, phase: Math.random() * 6.28,
       }));
       links = buildConstellations(stars);
       visibility = links.map(() => 0);
