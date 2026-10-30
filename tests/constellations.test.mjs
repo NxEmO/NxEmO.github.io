@@ -1,6 +1,23 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { buildConstellations } from '../src/lib/constellations.ts';
+import { buildConstellations, distributeStars } from '../src/lib/constellations.ts';
+
+test('star placement covers the viewport without tight clumps at a lower density', () => {
+  let seed = 123;
+  const random = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32);
+  for (const [width, height] of [[1265, 712], [390, 844], [2560, 1440]]) {
+    const points = distributeStars(width, height, random);
+    assert.equal(points.length, Math.min(145, Math.round(width * height / 8500)));
+    const quadrants = [0, 0, 0, 0];
+    points.forEach((p, i) => {
+      assert.ok(p.x >= 0 && p.x <= width && p.y >= 0 && p.y <= height);
+      quadrants[Number(p.x >= width / 2) + 2 * Number(p.y >= height / 2)]++;
+      for (const q of points.slice(i + 1)) assert.ok(Math.hypot(p.x - q.x, p.y - q.y) > 25);
+    });
+    assert.ok(quadrants.every(count => count >= points.length * .15));
+  }
+  assert.deepEqual(distributeStars(0, 0), []);
+});
 
 test('constellations remain short open chains without crossing edges', () => {
   let seed = 42;
